@@ -91,17 +91,17 @@ class YouTubeExtractor:
                 'filename': f'{video_id}_default.jpg'
             },
             {
-                'quality': 'Thumbnail 1',
+                'quality': 'Thumbnail 1 (120x90)',
                 'url': f'https://img.youtube.com/vi/{video_id}/1.jpg',
                 'filename': f'{video_id}_1.jpg'
             },
             {
-                'quality': 'Thumbnail 2',
+                'quality': 'Thumbnail 2 (120x90)',
                 'url': f'https://img.youtube.com/vi/{video_id}/2.jpg',
                 'filename': f'{video_id}_2.jpg'
             },
             {
-                'quality': 'Thumbnail 3',
+                'quality': 'Thumbnail 3 (120x90)',
                 'url': f'https://img.youtube.com/vi/{video_id}/3.jpg',
                 'filename': f'{video_id}_3.jpg'
             },
