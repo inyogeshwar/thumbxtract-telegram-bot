@@ -10,6 +10,11 @@ from typing import Optional, Tuple, List
 
 logger = logging.getLogger(__name__)
 
+# Constants
+TICKET_STATUS_OPEN = 'open'
+TICKET_STATUS_CLOSED = 'closed'
+TICKET_STATUS_PENDING = 'pending'
+
 
 class Database:
     """Handles all database operations for the bot."""
@@ -802,8 +807,8 @@ class Database:
                 
                 # Count resolved tickets
                 async with db.execute(
-                    'SELECT COUNT(*) as count FROM support_tickets WHERE assigned_agent_id = ? AND status = "closed"',
-                    (agent_id,)
+                    'SELECT COUNT(*) as count FROM support_tickets WHERE assigned_agent_id = ? AND status = ?',
+                    (agent_id, TICKET_STATUS_CLOSED)
                 ) as cursor:
                     resolved = await cursor.fetchone()
                 

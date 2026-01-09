@@ -35,6 +35,9 @@ logger = logging.getLogger(__name__)
 (MAIN_MENU, ADMIN_MENU, SUPPORT_MENU, TICKET_SUBJECT, TICKET_MESSAGE, 
  TICKET_ATTACHMENT, VIDEO_QUALITY_SELECT, AGENT_MENU) = range(8)
 
+# Constants
+TICKET_LIST_LIMIT = 15  # Maximum tickets to show in lists
+
 
 class ThumbnailBot:
     """Main bot class with ReplyKeyboard interface."""
@@ -926,7 +929,7 @@ class ThumbnailBot:
                 await update.message.reply_text("📋 No open tickets at the moment!")
             else:
                 ticket_list = "📋 Open Tickets:\n\n"
-                for ticket in tickets[:15]:
+                for ticket in tickets[:TICKET_LIST_LIMIT]:
                     ticket_list += (
                         f"🎫 {ticket['ticket_id']}\n"
                         f"Subject: {ticket['subject']}\n"
@@ -945,7 +948,7 @@ class ThumbnailBot:
                 await update.message.reply_text("📋 You have no assigned tickets!")
             else:
                 ticket_list = "📋 Your Assigned Tickets:\n\n"
-                for ticket in tickets[:15]:
+                for ticket in tickets[:TICKET_LIST_LIMIT]:
                     ticket_list += (
                         f"🎫 {ticket['ticket_id']}\n"
                         f"Subject: {ticket['subject']}\n"
