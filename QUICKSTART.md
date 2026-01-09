@@ -1,221 +1,423 @@
-# Quick Start Guide
+# 🚀 Quick Start Guide
 
-## 🚀 Getting Started in 5 Minutes
+Get your YouTube Thumbnail Bot running in 5 minutes!
 
-### Step 1: Get Your Bot Token
-1. Open Telegram and search for [@BotFather](https://t.me/BotFather)
-2. Send `/newbot` and follow the instructions
-3. Copy your bot token (looks like: `123456789:ABCdefGHIjklMNOpqrsTUVwxyz`)
-4. Get your Telegram user ID from [@userinfobot](https://t.me/userinfobot)
+## ⚡ Quick Setup (5 Steps)
 
-### Step 2: Install the Bot
+### 1. Clone & Install
+
 ```bash
-# Clone the repository
 git clone https://github.com/inyogeshwar/thumbxtract-telegram-bot.git
 cd thumbxtract-telegram-bot
-
-# Install dependencies
-pip3 install -r requirements.txt
-
-# Create configuration
-cp config.ini.example config.ini
+pip install -r requirements.txt
 ```
 
-### Step 3: Configure
-Edit `config.ini`:
+### 2. Get Bot Token
+
+1. Open Telegram
+2. Search for [@BotFather](https://t.me/BotFather)
+3. Send `/newbot`
+4. Follow instructions
+5. Copy your bot token
+
+### 3. Get Your User ID
+
+1. Search for [@userinfobot](https://t.me/userinfobot) on Telegram
+2. Start the bot
+3. Copy your user ID
+
+### 4. Configure
+
+```bash
+cp config.ini.example config.ini
+nano config.ini
+```
+
+**Minimal Required Config:**
 ```ini
 [bot]
-token = YOUR_BOT_TOKEN_HERE  # Paste your token from BotFather
-admin_ids = YOUR_USER_ID      # Your user ID from userinfobot
+token = YOUR_BOT_TOKEN_HERE
+admin_ids = YOUR_USER_ID
 
 [payment]
-upi_id = your-upi-id@bank     # Your UPI ID for payments
+upi_id = your-upi@bank
 
 [admin_panel]
 username = admin
-password = CHANGE_THIS_NOW    # Pick a strong password!
+password = ChangeMe123!
 ```
 
-### Step 4: Run
+Save and exit (Ctrl+X, Y, Enter)
+
+### 5. Run!
+
 ```bash
-# Start the bot
-python3 bot.py
+# Terminal 1 - Run the bot
+python bot.py
 
-# In another terminal (optional): Start admin panel
-python3 admin_panel.py
+# Terminal 2 - Run admin panel (optional but recommended)
+python admin_panel.py
 ```
 
-### Step 5: Test
-1. Open Telegram
-2. Search for your bot (the username you chose)
-3. Send `/start`
-4. Send any YouTube link: `https://www.youtube.com/watch?v=dQw4w9WgXcQ`
-5. Enjoy your thumbnails! 🎉
+**Done! 🎉**
 
-## 📋 Common Commands
+Your bot is now running! 
+- Open Telegram and search for your bot
+- Send `/start`
+- Admin panel: http://localhost:5000
+
+## 📱 First Steps After Setup
+
+### Initialize Data (Recommended)
+
+```bash
+# First, start the bot once to create database
+python bot.py
+# Press Ctrl+C after it says "Bot started successfully"
+
+# Then initialize FAQ and default data
+python initialize_data.py
+```
+
+### Add Yourself as Agent (Optional)
+
+Open Python and run:
+```python
+import asyncio
+from database import Database
+
+async def add_me():
+    db = Database('bot_data.db')
+    await db.initialize()
+    await db.add_agent(YOUR_USER_ID, 'owner')
+    print("✅ Added as agent!")
+
+asyncio.run(add_me())
+```
+
+Replace `YOUR_USER_ID` with your actual Telegram user ID.
+
+### Test Your Bot
+
+1. Open Telegram
+2. Search for your bot (use the username you set with BotFather)
+3. Send `/start`
+4. You should see the main menu with buttons!
+5. Try `📹 Get Thumbnail` and send a YouTube link
+
+### Access Admin Panel
+
+1. Open browser
+2. Go to http://localhost:5000
+3. Login with username and password from config.ini
+4. Explore the dashboard!
+
+## 🎯 Quick Commands
 
 ### User Commands
-- `/start` - Register and see welcome message
-- `/help` - Get help and quick actions
-- `/stats` - View your usage statistics
-- `/referral` - Get your referral link
-- `/premium` - See premium benefits and upgrade
-- `/language` - Change language
+- `/start` - Start the bot
+- `/help` - Show help
+- `/stats` - Your statistics
+- `/referral` - Get referral link
+- `/premium` - Premium info
 
-### Admin Commands
-- `/adminstats` - Bot statistics
-- `/broadcast <message>` - Message all users
-- `/ban <user_id>` - Ban a user
-- `/unban <user_id>` - Unban a user
+### Admin Commands (Bot)
+- Use `👑 Admin Panel` button
+- No commands needed!
 
-## 🎮 How to Use
+### Admin Panel Features
+- Dashboard: http://localhost:5000
+- Users: http://localhost:5000/users
+- Tickets: http://localhost:5000/tickets
+- Agents: http://localhost:5000/agents
+- Settings: http://localhost:5000/settings
 
-### Extract Thumbnails
-Just send any of these formats:
-- Full link: `https://www.youtube.com/watch?v=VIDEO_ID`
-- Short link: `https://youtu.be/VIDEO_ID`
-- Shorts: `https://youtube.com/shorts/VIDEO_ID`
-- Just ID: `VIDEO_ID`
+## ⚙️ Common Configurations
 
-### Get Premium
-**Option 1: Free via Referrals**
-1. Send `/referral` to get your link
-2. Share it with friends
-3. Get 10 referrals = Free Premium! 🎁
+### Change Daily Limits
 
-**Option 2: Purchase**
-1. Send `/premium`
-2. Click "Buy Premium"
-3. Choose UPI Payment
-4. Send payment to the UPI ID
-5. Upload screenshot
-6. Wait for admin approval
+Edit `config.ini`:
+```ini
+[limits]
+free_daily_limit = 20      # Change free user limit
+premium_daily_limit = 2000 # Change premium limit
+```
 
-## 🌐 Admin Panel
+Restart bot to apply changes.
 
-Access at: `http://localhost:5000` (or your VPS IP)
+### Enable Force Join Channel
 
-**Default Login:**
-- Username: `admin`
-- Password: `admin123` (⚠️ CHANGE THIS!)
+1. Create a Telegram channel
+2. Add your bot as admin
+3. Go to admin panel → Settings
+4. Toggle "Force Join Channel"
+5. Enter channel username (e.g., @mychannel)
+6. Save
 
-**Features:**
-- View all users
-- Toggle premium status
-- Ban/unban users
-- Approve payments
-- See statistics
+### Enable Maintenance Mode
+
+**Via Admin Panel:**
+1. Go to Settings
+2. Toggle "Maintenance Mode"
+3. Save
+
+**Via Database:**
+```python
+import asyncio
+from database import Database
+
+async def maintenance():
+    db = Database('bot_data.db')
+    await db.initialize()
+    await db.set_setting('maintenance_mode', '1')  # Enable
+    # await db.set_setting('maintenance_mode', '0')  # Disable
+    print("✅ Updated!")
+
+asyncio.run(maintenance())
+```
 
 ## 🐛 Troubleshooting
 
-### Bot not responding?
+### Bot Not Starting
+
+**Error: "No module named 'telegram'"**
 ```bash
-# Check if running
-ps aux | grep bot.py
-
-# View logs
-tail -f bot.log  # if you set up logging
-
-# Restart
-pkill -f bot.py
-python3 bot.py
+pip install -r requirements.txt
 ```
 
-### Can't access admin panel?
+**Error: "Config file not found"**
 ```bash
-# Check if running
-ps aux | grep admin_panel.py
+cp config.ini.example config.ini
+nano config.ini
+# Add your bot token
+```
 
-# Try direct access
-curl http://localhost:5000
+**Error: "Unauthorized"**
+```bash
+# Check your bot token in config.ini
+# Make sure it's correct from BotFather
+```
 
+### Bot Starts but Doesn't Respond
+
+**Check bot is running:**
+```bash
+ps aux | grep bot.py
+```
+
+**Check logs:**
+```bash
+python bot.py
+# Look for errors in the output
+```
+
+**Test bot token:**
+```bash
+curl https://api.telegram.org/bot<YOUR_TOKEN>/getMe
+```
+
+### Admin Panel Not Loading
+
+**Port already in use:**
+```bash
+# Kill existing process
+sudo lsof -ti:5000 | xargs kill -9
+
+# Or change port in admin_panel.py:
+# app.run(host='0.0.0.0', port=5001, debug=False)
+```
+
+**Can't access from outside:**
+```bash
 # Check firewall
 sudo ufw allow 5000
+
+# Or use SSH tunnel
+ssh -L 5000:localhost:5000 user@your-vps
+# Then access http://localhost:5000 on your local machine
 ```
 
-### Database locked?
+### Database Errors
+
+**Error: "database is locked"**
 ```bash
-# Stop bot
+# Stop all instances of bot/admin panel
 pkill -f bot.py
+pkill -f admin_panel.py
 
-# Backup database
-cp bot_data.db bot_data.db.backup
-
-# Start bot again
-python3 bot.py
+# Restart one at a time
 ```
 
-## 💡 Pro Tips
-
-### 1. Run in Background
+**Reset database (WARNING: Deletes all data):**
 ```bash
-# Using screen
-screen -S bot
-python3 bot.py
-# Press Ctrl+A, then D to detach
-
-# Reattach later
-screen -r bot
+rm bot_data.db
+python bot.py
+# Bot will create new database
+python initialize_data.py
 ```
 
-### 2. Auto-Restart on Crash
-Create systemd service (see README for details)
+## 📊 Usage Examples
 
-### 3. Monitor Logs
-```python
-# Add to bot.py for file logging:
-logging.basicConfig(
-    filename='bot.log',
-    level=logging.INFO
-)
+### Test Thumbnail Download
+
+1. Click `📹 Get Thumbnail`
+2. Send: `https://youtube.com/watch?v=dQw4w9WgXcQ`
+3. Choose `⚡ All Qualities`
+4. Receive thumbnails!
+
+### Test Support System
+
+1. Click `💬 Support`
+2. Click `🎫 Create Ticket`
+3. Enter subject: "Test Ticket"
+4. Enter message: "This is a test"
+5. Optionally add attachment (photo/document)
+6. Click `✅ Submit Ticket`
+7. Check ticket in admin panel!
+
+### Test Referral System
+
+1. Click `🎁 Referrals`
+2. Copy your link
+3. Open in incognito/another browser
+4. Join as new user
+5. Check referral count increased!
+
+### Test Agent System
+
+1. Add yourself as agent (see above)
+2. Restart bot
+3. You'll see `🎫 Agent Panel` button
+4. Create a ticket as regular user
+5. Click `📋 Open Tickets` in agent panel
+6. See the ticket!
+
+## 🚀 Production Deployment
+
+### Using systemd (Recommended)
+
+Create `/etc/systemd/system/thumbxtract-bot.service`:
+```ini
+[Unit]
+Description=YouTube Thumbnail Bot
+After=network.target
+
+[Service]
+Type=simple
+User=botuser
+WorkingDirectory=/home/botuser/thumbxtract-telegram-bot
+ExecStart=/usr/bin/python3 bot.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
 ```
 
-### 4. Backup Database
+Create `/etc/systemd/system/thumbxtract-admin.service`:
+```ini
+[Unit]
+Description=YouTube Thumbnail Bot Admin Panel
+After=network.target
+
+[Service]
+Type=simple
+User=botuser
+WorkingDirectory=/home/botuser/thumbxtract-telegram-bot
+ExecStart=/usr/bin/python3 admin_panel.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Enable and start:
 ```bash
-# Daily backup cronjob
-0 2 * * * cp /path/to/bot_data.db /path/to/backups/bot_data_$(date +\%Y\%m\%d).db
+sudo systemctl daemon-reload
+sudo systemctl enable thumbxtract-bot thumbxtract-admin
+sudo systemctl start thumbxtract-bot thumbxtract-admin
+
+# Check status
+sudo systemctl status thumbxtract-bot
+sudo systemctl status thumbxtract-admin
+
+# View logs
+sudo journalctl -u thumbxtract-bot -f
+sudo journalctl -u thumbxtract-admin -f
 ```
 
-### 5. Security Checklist
-- ✅ Change admin panel password
-- ✅ Keep bot token secret
-- ✅ Use strong passwords
-- ✅ Regular database backups
-- ✅ Keep dependencies updated
-- ✅ Monitor for suspicious activity
+### Using PM2 (Alternative)
 
-## 🎯 Next Steps
+```bash
+# Install PM2
+npm install -g pm2
 
-1. **Customize Messages**
-   - Edit `i18n.py` to change bot messages
-   - Add your own language translations
+# Start bot
+pm2 start bot.py --name thumbxtract-bot --interpreter python3
+pm2 start admin_panel.py --name thumbxtract-admin --interpreter python3
 
-2. **Adjust Limits**
-   - Modify `config.ini` for different limits
-   - Balance free vs premium features
+# Save configuration
+pm2 save
+pm2 startup
 
-3. **Add Your Branding**
-   - Update welcome messages
-   - Add your contact info
-   - Customize button text
+# View logs
+pm2 logs thumbxtract-bot
+pm2 logs thumbxtract-admin
 
-4. **Monitor Growth**
-   - Check admin panel regularly
-   - Review user statistics
-   - Track referral performance
+# Restart
+pm2 restart all
 
-5. **Scale Up**
-   - Deploy to VPS for 24/7 uptime
-   - Set up systemd service
-   - Configure automatic backups
+# Stop
+pm2 stop all
+```
 
-## 📞 Need Help?
+### Using Docker (Coming Soon)
 
-- 📖 Full docs: See README.md
-- 🐛 Found a bug: Open an issue on GitHub
-- 💬 Questions: Check GitHub discussions
-- ⭐ Like it? Star the repo!
+Stay tuned for Docker deployment!
 
----
+## 📚 Next Steps
 
-**Happy Bot Running! 🤖**
+Once your bot is running:
+
+1. **Customize Settings**
+   - Change limits in config.ini
+   - Set up force join channel
+   - Add FAQ entries
+
+2. **Add Agents**
+   - Add support team members
+   - Train them on ticket system
+
+3. **Configure Payment**
+   - Set up UPI ID
+   - Test payment flow
+
+4. **Monitor Analytics**
+   - Check admin panel daily
+   - Monitor user growth
+   - Track request patterns
+
+5. **Promote Your Bot**
+   - Share on social media
+   - Create promotional content
+   - Engage with users
+
+## 🆘 Need Help?
+
+- **Documentation**: See README.md
+- **Issues**: [GitHub Issues](https://github.com/inyogeshwar/thumbxtract-telegram-bot/issues)
+- **Questions**: Open a discussion on GitHub
+
+## 🎉 You're All Set!
+
+Your YouTube Thumbnail Bot is now running with:
+- ✅ ReplyKeyboard UI
+- ✅ Support ticket system
+- ✅ Multi-agent operations
+- ✅ Premium & referral system
+- ✅ Web admin panel with analytics
+- ✅ Force join & maintenance mode
+- ✅ Multi-language support
+
+**Happy bot running! 🚀**
