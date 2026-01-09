@@ -4,6 +4,7 @@ YouTube utilities for extracting video IDs and thumbnail URLs.
 
 import re
 import logging
+import aiohttp
 from typing import Optional, List, Dict
 
 logger = logging.getLogger(__name__)
@@ -109,6 +110,26 @@ class YouTubeExtractor:
         
         logger.info(f"Generated {len(thumbnails)} thumbnail URLs for video {video_id}")
         return thumbnails
+    
+    @staticmethod
+    async def check_thumbnail_exists(url: str) -> bool:
+        """
+        Check if a thumbnail URL exists using HEAD request.
+        
+        Args:
+            url: Thumbnail URL
+            
+        Returns:
+            True if thumbnail exists, False otherwise
+        """
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.head(url, timeout=aiohttp.ClientTimeout(total=5)) as response:
+                    return response.status == 200
+        except Exception as e:
+            logger.warning(f"Could not check thumbnail {url}: {e}")
+            # If we can't check, assume it exists to avoid blocking
+            return True
     
     @staticmethod
     def validate_video_id(video_id: str) -> bool:

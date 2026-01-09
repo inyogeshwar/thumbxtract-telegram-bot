@@ -29,8 +29,10 @@ class Database:
                     first_name TEXT,
                     language_code TEXT,
                     is_premium BOOLEAN DEFAULT 0,
+                    premium_expiry DATE,
                     referred_by INTEGER,
                     referral_count INTEGER DEFAULT 0,
+                    is_banned BOOLEAN DEFAULT 0,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     last_active TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
@@ -66,6 +68,19 @@ class Database:
                     user_id INTEGER PRIMARY KEY,
                     request_count INTEGER DEFAULT 0,
                     window_start TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            ''')
+            
+            # Payment proofs table
+            await db.execute('''
+                CREATE TABLE IF NOT EXISTS payment_proofs (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER,
+                    file_id TEXT,
+                    file_unique_id TEXT,
+                    status TEXT DEFAULT 'pending',
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (user_id) REFERENCES users (user_id)
                 )
             ''')
             
@@ -133,18 +148,98 @@ class Database:
     async def is_premium(self, user_id: int) -> bool:
         """Check if user is premium."""
         user = await self.get_user(user_id)
-        return user.get('is_premium', False) if user else False
+        if not user or not user.get('is_premium', False):
+            return False
+        
+        # Check if premium has expired
+        premium_expiry = user.get('premium_expiry')
+        if premium_expiry:
+            expiry_date = datetime.fromisoformat(premium_expiry)
+            if datetime.now() > expiry_date:
+                # Premium has expired, update status
+                await self.set_premium(user_id, False)
+                return False
+        
+        return True
     
     async def set_premium(self, user_id: int, is_premium: bool = True):
         """Set user premium status."""
         try:
             async with aiosqlite.connect(self.db_path) as db:
                 await db.execute('''
-                    UPDATE users SET is_premium = ? WHERE user_id = ?
+                    UPDATE users SET is_premium = ?, premium_expiry = NULL WHERE user_id = ?
                 ''', (is_premium, user_id))
                 await db.commit()
         except Exception as e:
             logger.error(f"Error setting premium for {user_id}: {e}")
+    
+    async def set_premium_with_expiry(self, user_id: int, days: int):
+        """Set user premium status with expiry."""
+        try:
+            expiry_date = datetime.now() + timedelta(days=days)
+            
+            async with aiosqlite.connect(self.db_path) as db:
+                await db.execute('''
+                    UPDATE users SET is_premium = 1, premium_expiry = ? WHERE user_id = ?
+                ''', (expiry_date, user_id))
+                await db.commit()
+        except Exception as e:
+            logger.error(f"Error setting premium with expiry for {user_id}: {e}")
+    
+    async def is_banned(self, user_id: int) -> bool:
+        """Check if user is banned."""
+        user = await self.get_user(user_id)
+        return user.get('is_banned', False) if user else False
+    
+    async def ban_user(self, user_id: int, is_banned: bool = True):
+        """Ban or unban a user."""
+        try:
+            async with aiosqlite.connect(self.db_path) as db:
+                await db.execute('''
+                    UPDATE users SET is_banned = ? WHERE user_id = ?
+                ''', (is_banned, user_id))
+                await db.commit()
+        except Exception as e:
+            logger.error(f"Error banning user {user_id}: {e}")
+    
+    async def add_payment_proof(self, user_id: int, file_id: str, file_unique_id: str):
+        """Add a payment proof."""
+        try:
+            async with aiosqlite.connect(self.db_path) as db:
+                await db.execute('''
+                    INSERT INTO payment_proofs (user_id, file_id, file_unique_id)
+                    VALUES (?, ?, ?)
+                ''', (user_id, file_id, file_unique_id))
+                await db.commit()
+        except Exception as e:
+            logger.error(f"Error adding payment proof for {user_id}: {e}")
+    
+    async def update_payment_status(self, user_id: int, status: str):
+        """Update payment proof status."""
+        try:
+            async with aiosqlite.connect(self.db_path) as db:
+                await db.execute('''
+                    UPDATE payment_proofs 
+                    SET status = ?
+                    WHERE user_id = ? AND status = 'pending'
+                    ORDER BY created_at DESC
+                    LIMIT 1
+                ''', (status, user_id))
+                await db.commit()
+        except Exception as e:
+            logger.error(f"Error updating payment status for {user_id}: {e}")
+    
+    async def get_all_users(self) -> List[dict]:
+        """Get all users for broadcasting."""
+        try:
+            async with aiosqlite.connect(self.db_path) as db:
+                db.row_factory = aiosqlite.Row
+                async with db.execute('SELECT * FROM users WHERE is_banned = 0') as cursor:
+                    rows = await cursor.fetchall()
+                    return [dict(row) for row in rows]
+        except Exception as e:
+            logger.error(f"Error getting all users: {e}")
+            return []
     
     async def get_daily_usage(self, user_id: int) -> int:
         """Get user's usage count for today."""

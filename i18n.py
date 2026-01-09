@@ -73,6 +73,7 @@ class I18n:
             ),
             'processing': "⏳ Processing your request...",
             'thumbnails_found': "✅ Found {count} thumbnails for video: {video_id}",
+            'no_thumbnails': "❌ No thumbnails found for this video.",
             'invalid_link': "❌ Invalid YouTube link or video ID. Please try again.",
             'limit_reached': (
                 "⚠️ Daily limit reached ({limit} requests).\n"
@@ -86,6 +87,53 @@ class I18n:
             'choose_language': "🌍 Choose your language:",
             'yes': "Yes ✅",
             'no': "No ❌",
+            'main_menu': "🏠 Main Menu\n\nChoose an option below:",
+            'what_next': "✅ Done! What would you like to do next?",
+            'send_video_link': "📹 Send me a YouTube link or video ID!",
+            'user_banned': "🚫 You have been banned from using this bot.",
+            'payment_options': (
+                "💳 Payment Options:\n\n"
+                "Choose your preferred payment method to upgrade to premium:"
+            ),
+            'upi_payment_instructions': (
+                "💰 UPI Payment Instructions:\n\n"
+                "1. Send payment to UPI ID: {upi_id}\n"
+                "2. Take a screenshot of the payment confirmation\n"
+                "3. Upload the screenshot here\n"
+                "4. Wait for admin approval\n\n"
+                "Price: Check with admin for current pricing"
+            ),
+            'stars_payment_coming_soon': "⭐ Telegram Stars payment coming soon!",
+            'send_payment_screenshot': (
+                "📸 Please send your payment screenshot.\n\n"
+                "Make sure the screenshot clearly shows the transaction details."
+            ),
+            'payment_proof_received': (
+                "✅ Payment proof received!\n\n"
+                "Your payment is under review. You'll be notified once approved."
+            ),
+            'payment_approved': (
+                "🎉 Congratulations!\n\n"
+                "Your payment has been approved!\n"
+                "You now have premium access for {days} days. Enjoy! 💎"
+            ),
+            'payment_rejected': (
+                "❌ Payment Rejected\n\n"
+                "Your payment proof was rejected. Please contact admin for details."
+            ),
+            # Button texts
+            'btn_help': "❓ Help",
+            'btn_stats': "📊 My Stats",
+            'btn_referral': "🎁 Referral",
+            'btn_premium': "💎 Premium",
+            'btn_buy_premium': "💳 Buy Premium",
+            'btn_upgrade_premium': "⬆️ Upgrade to Premium",
+            'btn_main_menu': "🏠 Main Menu",
+            'btn_new_video': "🆕 New Video",
+            'btn_upi_payment': "💰 UPI Payment (India)",
+            'btn_stars_payment': "⭐ Telegram Stars",
+            'btn_back': "⬅️ Back",
+            'btn_upload_proof': "📸 Upload Payment Proof",
         },
         'es': {
             'welcome': (
@@ -145,6 +193,7 @@ class I18n:
             ),
             'processing': "⏳ Procesando tu solicitud...",
             'thumbnails_found': "✅ Se encontraron {count} miniaturas para el video: {video_id}",
+            'no_thumbnails': "❌ No se encontraron miniaturas para este video.",
             'invalid_link': "❌ Enlace o ID de YouTube inválido. Por favor, inténtalo de nuevo.",
             'limit_reached': (
                 "⚠️ Límite diario alcanzado ({limit} solicitudes).\n"
@@ -158,6 +207,53 @@ class I18n:
             'choose_language': "🌍 Elige tu idioma:",
             'yes': "Sí ✅",
             'no': "No ❌",
+            'main_menu': "🏠 Menú Principal\n\nElige una opción a continuación:",
+            'what_next': "✅ ¡Hecho! ¿Qué te gustaría hacer a continuación?",
+            'send_video_link': "📹 ¡Envíame un enlace de YouTube o ID de video!",
+            'user_banned': "🚫 Has sido baneado de usar este bot.",
+            'payment_options': (
+                "💳 Opciones de Pago:\n\n"
+                "Elige tu método de pago preferido para actualizar a premium:"
+            ),
+            'upi_payment_instructions': (
+                "💰 Instrucciones de Pago UPI:\n\n"
+                "1. Envía el pago a UPI ID: {upi_id}\n"
+                "2. Toma una captura de pantalla de la confirmación de pago\n"
+                "3. Sube la captura de pantalla aquí\n"
+                "4. Espera la aprobación del administrador\n\n"
+                "Precio: Consulta con el administrador el precio actual"
+            ),
+            'stars_payment_coming_soon': "⭐ ¡Pago con Telegram Stars próximamente!",
+            'send_payment_screenshot': (
+                "📸 Por favor, envía tu captura de pantalla de pago.\n\n"
+                "Asegúrate de que la captura muestre claramente los detalles de la transacción."
+            ),
+            'payment_proof_received': (
+                "✅ ¡Prueba de pago recibida!\n\n"
+                "Tu pago está en revisión. Se te notificará una vez aprobado."
+            ),
+            'payment_approved': (
+                "🎉 ¡Felicitaciones!\n\n"
+                "¡Tu pago ha sido aprobado!\n"
+                "Ahora tienes acceso premium por {days} días. ¡Disfruta! 💎"
+            ),
+            'payment_rejected': (
+                "❌ Pago Rechazado\n\n"
+                "Tu prueba de pago fue rechazada. Por favor contacta al administrador para detalles."
+            ),
+            # Button texts
+            'btn_help': "❓ Ayuda",
+            'btn_stats': "📊 Mis Estadísticas",
+            'btn_referral': "🎁 Referidos",
+            'btn_premium': "💎 Premium",
+            'btn_buy_premium': "💳 Comprar Premium",
+            'btn_upgrade_premium': "⬆️ Actualizar a Premium",
+            'btn_main_menu': "🏠 Menú Principal",
+            'btn_new_video': "🆕 Nuevo Video",
+            'btn_upi_payment': "💰 Pago UPI (India)",
+            'btn_stars_payment': "⭐ Telegram Stars",
+            'btn_back': "⬅️ Volver",
+            'btn_upload_proof': "📸 Subir Prueba de Pago",
         },
         'hi': {
             'welcome': (
@@ -217,6 +313,7 @@ class I18n:
             ),
             'processing': "⏳ आपके अनुरोध को संसाधित किया जा रहा है...",
             'thumbnails_found': "✅ वीडियो के लिए {count} थंबनेल मिले: {video_id}",
+            'no_thumbnails': "❌ इस वीडियो के लिए कोई थंबनेल नहीं मिला।",
             'invalid_link': "❌ अमान्य YouTube लिंक या वीडियो ID। कृपया पुनः प्रयास करें।",
             'limit_reached': (
                 "⚠️ दैनिक सीमा पूर्ण ({limit} अनुरोध)।\n"
@@ -230,6 +327,53 @@ class I18n:
             'choose_language': "🌍 अपनी भाषा चुनें:",
             'yes': "हाँ ✅",
             'no': "नहीं ❌",
+            'main_menu': "🏠 मुख्य मेनू\n\nनीचे से एक विकल्प चुनें:",
+            'what_next': "✅ हो गया! आप आगे क्या करना चाहेंगे?",
+            'send_video_link': "📹 मुझे YouTube लिंक या वीडियो ID भेजें!",
+            'user_banned': "🚫 आपको इस बॉट का उपयोग करने से प्रतिबंधित कर दिया गया है।",
+            'payment_options': (
+                "💳 भुगतान विकल्प:\n\n"
+                "प्रीमियम में अपग्रेड करने के लिए अपनी पसंदीदा भुगतान विधि चुनें:"
+            ),
+            'upi_payment_instructions': (
+                "💰 UPI भुगतान निर्देश:\n\n"
+                "1. UPI ID पर भुगतान भेजें: {upi_id}\n"
+                "2. भुगतान पुष्टि का स्क्रीनशॉट लें\n"
+                "3. स्क्रीनशॉट यहां अपलोड करें\n"
+                "4. व्यवस्थापक की स्वीकृति की प्रतीक्षा करें\n\n"
+                "कीमत: वर्तमान मूल्य के लिए व्यवस्थापक से जांचें"
+            ),
+            'stars_payment_coming_soon': "⭐ Telegram Stars भुगतान जल्द आ रहा है!",
+            'send_payment_screenshot': (
+                "📸 कृपया अपना भुगतान स्क्रीनशॉट भेजें।\n\n"
+                "सुनिश्चित करें कि स्क्रीनशॉट में लेनदेन विवरण स्पष्ट रूप से दिखाई दे रहे हैं।"
+            ),
+            'payment_proof_received': (
+                "✅ भुगतान प्रमाण प्राप्त हुआ!\n\n"
+                "आपका भुगतान समीक्षाधीन है। स्वीकृत होने पर आपको सूचित किया जाएगा।"
+            ),
+            'payment_approved': (
+                "🎉 बधाई हो!\n\n"
+                "आपका भुगतान स्वीकृत हो गया है!\n"
+                "अब आपके पास {days} दिनों के लिए प्रीमियम एक्सेस है। आनंद लें! 💎"
+            ),
+            'payment_rejected': (
+                "❌ भुगतान अस्वीकृत\n\n"
+                "आपका भुगतान प्रमाण अस्वीकार कर दिया गया था। विवरण के लिए कृपया व्यवस्थापक से संपर्क करें।"
+            ),
+            # Button texts
+            'btn_help': "❓ मदद",
+            'btn_stats': "📊 मेरे आंकड़े",
+            'btn_referral': "🎁 रेफरल",
+            'btn_premium': "💎 प्रीमियम",
+            'btn_buy_premium': "💳 प्रीमियम खरीदें",
+            'btn_upgrade_premium': "⬆️ प्रीमियम में अपग्रेड करें",
+            'btn_main_menu': "🏠 मुख्य मेनू",
+            'btn_new_video': "🆕 नया वीडियो",
+            'btn_upi_payment': "💰 UPI भुगतान (भारत)",
+            'btn_stars_payment': "⭐ Telegram Stars",
+            'btn_back': "⬅️ वापस",
+            'btn_upload_proof': "📸 भुगतान प्रमाण अपलोड करें",
         },
     }
     
