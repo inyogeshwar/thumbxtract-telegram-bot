@@ -84,6 +84,102 @@ class Database:
                 )
             ''')
             
+            # Support tickets table
+            await db.execute('''
+                CREATE TABLE IF NOT EXISTS support_tickets (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    ticket_id TEXT UNIQUE,
+                    user_id INTEGER,
+                    subject TEXT,
+                    status TEXT DEFAULT 'open',
+                    priority TEXT DEFAULT 'normal',
+                    assigned_agent_id INTEGER,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    first_reply_at TIMESTAMP,
+                    resolved_at TIMESTAMP,
+                    sla_first_reply INTEGER DEFAULT 3600,
+                    sla_resolution INTEGER DEFAULT 86400,
+                    escalated BOOLEAN DEFAULT 0,
+                    FOREIGN KEY (user_id) REFERENCES users (user_id),
+                    FOREIGN KEY (assigned_agent_id) REFERENCES agents (id)
+                )
+            ''')
+            
+            # Support messages table
+            await db.execute('''
+                CREATE TABLE IF NOT EXISTS support_messages (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    ticket_id TEXT,
+                    sender_id INTEGER,
+                    message TEXT,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (ticket_id) REFERENCES support_tickets (ticket_id)
+                )
+            ''')
+            
+            # Support attachments table
+            await db.execute('''
+                CREATE TABLE IF NOT EXISTS support_attachments (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    ticket_id TEXT,
+                    file_id TEXT,
+                    file_unique_id TEXT,
+                    file_type TEXT,
+                    file_name TEXT,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (ticket_id) REFERENCES support_tickets (ticket_id)
+                )
+            ''')
+            
+            # Agents table
+            await db.execute('''
+                CREATE TABLE IF NOT EXISTS agents (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER UNIQUE,
+                    role TEXT DEFAULT 'support',
+                    is_online BOOLEAN DEFAULT 0,
+                    assigned_tickets INTEGER DEFAULT 0,
+                    total_tickets_handled INTEGER DEFAULT 0,
+                    total_tickets_closed INTEGER DEFAULT 0,
+                    avg_reply_time INTEGER DEFAULT 0,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    last_active TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            ''')
+            
+            # FAQ table
+            await db.execute('''
+                CREATE TABLE IF NOT EXISTS faq (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    keywords TEXT,
+                    answer TEXT,
+                    language TEXT DEFAULT 'en',
+                    is_active BOOLEAN DEFAULT 1,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            ''')
+            
+            # Bot settings table
+            await db.execute('''
+                CREATE TABLE IF NOT EXISTS bot_settings (
+                    key TEXT PRIMARY KEY,
+                    value TEXT,
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            ''')
+            
+            # Initialize default settings
+            await db.execute('''
+                INSERT OR IGNORE INTO bot_settings (key, value) VALUES
+                ('maintenance_mode', '0'),
+                ('force_join_enabled', '0'),
+                ('force_join_channel', ''),
+                ('free_limit', '10'),
+                ('premium_limit', '1000'),
+                ('referral_bonus', '5'),
+                ('flood_time', '60')
+            ''')
+            
             await db.commit()
             logger.info("Database initialized successfully")
     
@@ -371,3 +467,333 @@ class Database:
                 'premium_users': 0,
                 'today_requests': 0
             }
+    
+    # Support Ticket Methods
+    async def create_ticket(self, user_id: int, subject: str) -> str:
+        """Create a new support ticket."""
+        import random
+        import string
+        
+        # Generate unique ticket ID
+        ticket_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+        
+        try:
+            async with aiosqlite.connect(self.db_path) as db:
+                await db.execute('''
+                    INSERT INTO support_tickets (ticket_id, user_id, subject)
+                    VALUES (?, ?, ?)
+                ''', (ticket_id, user_id, subject))
+                await db.commit()
+                return ticket_id
+        except Exception as e:
+            logger.error(f"Error creating ticket: {e}")
+            return None
+    
+    async def get_ticket(self, ticket_id: str) -> Optional[dict]:
+        """Get ticket information."""
+        try:
+            async with aiosqlite.connect(self.db_path) as db:
+                db.row_factory = aiosqlite.Row
+                async with db.execute('''
+                    SELECT * FROM support_tickets WHERE ticket_id = ?
+                ''', (ticket_id,)) as cursor:
+                    row = await cursor.fetchone()
+                    if row:
+                        return dict(row)
+            return None
+        except Exception as e:
+            logger.error(f"Error getting ticket {ticket_id}: {e}")
+            return None
+    
+    async def add_ticket_message(self, ticket_id: str, sender_id: int, message: str):
+        """Add a message to a ticket."""
+        try:
+            async with aiosqlite.connect(self.db_path) as db:
+                await db.execute('''
+                    INSERT INTO support_messages (ticket_id, sender_id, message)
+                    VALUES (?, ?, ?)
+                ''', (ticket_id, sender_id, message))
+                
+                # Update first_reply_at if this is the first agent reply
+                ticket = await self.get_ticket(ticket_id)
+                if ticket and not ticket.get('first_reply_at'):
+                    # Check if sender is an agent
+                    is_agent = await self.is_agent(sender_id)
+                    if is_agent:
+                        await db.execute('''
+                            UPDATE support_tickets 
+                            SET first_reply_at = CURRENT_TIMESTAMP
+                            WHERE ticket_id = ?
+                        ''', (ticket_id,))
+                
+                await db.commit()
+        except Exception as e:
+            logger.error(f"Error adding message to ticket {ticket_id}: {e}")
+    
+    async def add_ticket_attachment(self, ticket_id: str, file_id: str, 
+                                   file_unique_id: str, file_type: str, file_name: str = None):
+        """Add an attachment to a ticket."""
+        try:
+            async with aiosqlite.connect(self.db_path) as db:
+                await db.execute('''
+                    INSERT INTO support_attachments 
+                    (ticket_id, file_id, file_unique_id, file_type, file_name)
+                    VALUES (?, ?, ?, ?, ?)
+                ''', (ticket_id, file_id, file_unique_id, file_type, file_name))
+                await db.commit()
+        except Exception as e:
+            logger.error(f"Error adding attachment to ticket {ticket_id}: {e}")
+    
+    async def get_ticket_messages(self, ticket_id: str) -> List[dict]:
+        """Get all messages for a ticket."""
+        try:
+            async with aiosqlite.connect(self.db_path) as db:
+                db.row_factory = aiosqlite.Row
+                async with db.execute('''
+                    SELECT * FROM support_messages 
+                    WHERE ticket_id = ?
+                    ORDER BY created_at ASC
+                ''', (ticket_id,)) as cursor:
+                    rows = await cursor.fetchall()
+                    return [dict(row) for row in rows]
+        except Exception as e:
+            logger.error(f"Error getting messages for ticket {ticket_id}: {e}")
+            return []
+    
+    async def get_ticket_attachments(self, ticket_id: str) -> List[dict]:
+        """Get all attachments for a ticket."""
+        try:
+            async with aiosqlite.connect(self.db_path) as db:
+                db.row_factory = aiosqlite.Row
+                async with db.execute('''
+                    SELECT * FROM support_attachments 
+                    WHERE ticket_id = ?
+                    ORDER BY created_at ASC
+                ''', (ticket_id,)) as cursor:
+                    rows = await cursor.fetchall()
+                    return [dict(row) for row in rows]
+        except Exception as e:
+            logger.error(f"Error getting attachments for ticket {ticket_id}: {e}")
+            return []
+    
+    async def update_ticket_status(self, ticket_id: str, status: str):
+        """Update ticket status."""
+        try:
+            async with aiosqlite.connect(self.db_path) as db:
+                if status == 'resolved':
+                    await db.execute('''
+                        UPDATE support_tickets 
+                        SET status = ?, resolved_at = CURRENT_TIMESTAMP
+                        WHERE ticket_id = ?
+                    ''', (status, ticket_id))
+                else:
+                    await db.execute('''
+                        UPDATE support_tickets 
+                        SET status = ?
+                        WHERE ticket_id = ?
+                    ''', (status, ticket_id))
+                await db.commit()
+        except Exception as e:
+            logger.error(f"Error updating ticket status {ticket_id}: {e}")
+    
+    async def assign_ticket(self, ticket_id: str, agent_id: int):
+        """Assign a ticket to an agent."""
+        try:
+            async with aiosqlite.connect(self.db_path) as db:
+                await db.execute('''
+                    UPDATE support_tickets 
+                    SET assigned_agent_id = ?
+                    WHERE ticket_id = ?
+                ''', (agent_id, ticket_id))
+                
+                # Update agent assigned_tickets count
+                await db.execute('''
+                    UPDATE agents 
+                    SET assigned_tickets = assigned_tickets + 1
+                    WHERE id = ?
+                ''', (agent_id,))
+                
+                await db.commit()
+        except Exception as e:
+            logger.error(f"Error assigning ticket {ticket_id} to agent {agent_id}: {e}")
+    
+    async def get_user_tickets(self, user_id: int) -> List[dict]:
+        """Get all tickets for a user."""
+        try:
+            async with aiosqlite.connect(self.db_path) as db:
+                db.row_factory = aiosqlite.Row
+                async with db.execute('''
+                    SELECT * FROM support_tickets 
+                    WHERE user_id = ?
+                    ORDER BY created_at DESC
+                ''', (user_id,)) as cursor:
+                    rows = await cursor.fetchall()
+                    return [dict(row) for row in rows]
+        except Exception as e:
+            logger.error(f"Error getting tickets for user {user_id}: {e}")
+            return []
+    
+    async def get_open_tickets(self) -> List[dict]:
+        """Get all open tickets."""
+        try:
+            async with aiosqlite.connect(self.db_path) as db:
+                db.row_factory = aiosqlite.Row
+                async with db.execute('''
+                    SELECT * FROM support_tickets 
+                    WHERE status != 'resolved'
+                    ORDER BY created_at ASC
+                ''', ()) as cursor:
+                    rows = await cursor.fetchall()
+                    return [dict(row) for row in rows]
+        except Exception as e:
+            logger.error(f"Error getting open tickets: {e}")
+            return []
+    
+    # Agent Methods
+    async def add_agent(self, user_id: int, role: str = 'support') -> bool:
+        """Add a new agent."""
+        try:
+            async with aiosqlite.connect(self.db_path) as db:
+                await db.execute('''
+                    INSERT OR IGNORE INTO agents (user_id, role)
+                    VALUES (?, ?)
+                ''', (user_id, role))
+                await db.commit()
+                return True
+        except Exception as e:
+            logger.error(f"Error adding agent {user_id}: {e}")
+            return False
+    
+    async def is_agent(self, user_id: int) -> bool:
+        """Check if user is an agent."""
+        try:
+            async with aiosqlite.connect(self.db_path) as db:
+                async with db.execute('''
+                    SELECT id FROM agents WHERE user_id = ?
+                ''', (user_id,)) as cursor:
+                    row = await cursor.fetchone()
+                    return row is not None
+        except Exception as e:
+            logger.error(f"Error checking if user {user_id} is agent: {e}")
+            return False
+    
+    async def get_agent_by_user_id(self, user_id: int) -> Optional[dict]:
+        """Get agent by user ID."""
+        try:
+            async with aiosqlite.connect(self.db_path) as db:
+                db.row_factory = aiosqlite.Row
+                async with db.execute('''
+                    SELECT * FROM agents WHERE user_id = ?
+                ''', (user_id,)) as cursor:
+                    row = await cursor.fetchone()
+                    if row:
+                        return dict(row)
+            return None
+        except Exception as e:
+            logger.error(f"Error getting agent for user {user_id}: {e}")
+            return None
+    
+    async def get_least_busy_agent(self) -> Optional[dict]:
+        """Get the agent with the fewest assigned tickets."""
+        try:
+            async with aiosqlite.connect(self.db_path) as db:
+                db.row_factory = aiosqlite.Row
+                async with db.execute('''
+                    SELECT * FROM agents 
+                    WHERE is_online = 1
+                    ORDER BY assigned_tickets ASC
+                    LIMIT 1
+                ''', ()) as cursor:
+                    row = await cursor.fetchone()
+                    if row:
+                        return dict(row)
+            return None
+        except Exception as e:
+            logger.error(f"Error getting least busy agent: {e}")
+            return None
+    
+    async def set_agent_online(self, user_id: int, is_online: bool):
+        """Set agent online/offline status."""
+        try:
+            async with aiosqlite.connect(self.db_path) as db:
+                await db.execute('''
+                    UPDATE agents 
+                    SET is_online = ?, last_active = CURRENT_TIMESTAMP
+                    WHERE user_id = ?
+                ''', (is_online, user_id))
+                await db.commit()
+        except Exception as e:
+            logger.error(f"Error setting agent {user_id} online status: {e}")
+    
+    async def get_all_agents(self) -> List[dict]:
+        """Get all agents."""
+        try:
+            async with aiosqlite.connect(self.db_path) as db:
+                db.row_factory = aiosqlite.Row
+                async with db.execute('SELECT * FROM agents') as cursor:
+                    rows = await cursor.fetchall()
+                    return [dict(row) for row in rows]
+        except Exception as e:
+            logger.error(f"Error getting all agents: {e}")
+            return []
+    
+    # FAQ Methods
+    async def search_faq(self, keywords: str, language: str = 'en') -> Optional[dict]:
+        """Search FAQ by keywords."""
+        try:
+            async with aiosqlite.connect(self.db_path) as db:
+                db.row_factory = aiosqlite.Row
+                # Simple keyword matching
+                keywords_lower = keywords.lower()
+                async with db.execute('''
+                    SELECT * FROM faq 
+                    WHERE is_active = 1 
+                    AND language = ?
+                    AND LOWER(keywords) LIKE ?
+                    LIMIT 1
+                ''', (language, f'%{keywords_lower}%')) as cursor:
+                    row = await cursor.fetchone()
+                    if row:
+                        return dict(row)
+            return None
+        except Exception as e:
+            logger.error(f"Error searching FAQ: {e}")
+            return None
+    
+    async def add_faq(self, keywords: str, answer: str, language: str = 'en'):
+        """Add a new FAQ entry."""
+        try:
+            async with aiosqlite.connect(self.db_path) as db:
+                await db.execute('''
+                    INSERT INTO faq (keywords, answer, language)
+                    VALUES (?, ?, ?)
+                ''', (keywords, answer, language))
+                await db.commit()
+        except Exception as e:
+            logger.error(f"Error adding FAQ: {e}")
+    
+    # Settings Methods
+    async def get_setting(self, key: str) -> Optional[str]:
+        """Get a bot setting."""
+        try:
+            async with aiosqlite.connect(self.db_path) as db:
+                async with db.execute('''
+                    SELECT value FROM bot_settings WHERE key = ?
+                ''', (key,)) as cursor:
+                    row = await cursor.fetchone()
+                    return row[0] if row else None
+        except Exception as e:
+            logger.error(f"Error getting setting {key}: {e}")
+            return None
+    
+    async def set_setting(self, key: str, value: str):
+        """Set a bot setting."""
+        try:
+            async with aiosqlite.connect(self.db_path) as db:
+                await db.execute('''
+                    INSERT OR REPLACE INTO bot_settings (key, value, updated_at)
+                    VALUES (?, ?, CURRENT_TIMESTAMP)
+                ''', (key, value))
+                await db.commit()
+        except Exception as e:
+            logger.error(f"Error setting {key}: {e}")
