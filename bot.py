@@ -35,6 +35,9 @@ logger = logging.getLogger(__name__)
 (MAIN_MENU, ADMIN_MENU, SUPPORT_MENU, TICKET_SUBJECT, TICKET_MESSAGE, 
  TICKET_ATTACHMENT, VIDEO_QUALITY_SELECT, AGENT_MENU) = range(8)
 
+# Constants
+TICKET_LIST_LIMIT = 15  # Maximum tickets to show in lists
+
 
 class ThumbnailBot:
     """Main bot class with ReplyKeyboard interface."""
@@ -288,8 +291,7 @@ class ThumbnailBot:
         
         else:
             # Try to process as YouTube link
-            await self.handle_youtube_link(update, context)
-            return MAIN_MENU
+            return await self.handle_youtube_link(update, context)
     
     async def show_stats(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Show user statistics."""
@@ -786,6 +788,54 @@ class ThumbnailBot:
             )
             return ADMIN_MENU
         
+        elif text == '🔧 Maintenance Mode':
+            # Toggle maintenance mode
+            current = await self.db.get_setting('maintenance_mode')
+            new_value = '0' if current == '1' else '1'
+            await self.db.set_setting('maintenance_mode', new_value)
+            status = "ENABLED ✅" if new_value == '1' else "DISABLED ❌"
+            await update.message.reply_text(f"🔧 Maintenance Mode: {status}")
+            return ADMIN_MENU
+        
+        elif text == '🔗 Force Join':
+            # Show force join settings
+            enabled = await self.db.get_setting('force_join_enabled')
+            channel = await self.db.get_setting('force_join_channel')
+            status = "ENABLED ✅" if enabled == '1' else "DISABLED ❌"
+            await update.message.reply_text(
+                f"🔗 Force Join Settings\n\n"
+                f"Status: {status}\n"
+                f"Channel: {channel or 'Not set'}\n\n"
+                f"To configure, use database settings."
+            )
+            return ADMIN_MENU
+        
+        elif text == '📝 FAQ Management':
+            # Show FAQ management info
+            await update.message.reply_text(
+                "📝 FAQ Management\n\n"
+                "Use the database or web admin panel to manage FAQ entries.\n\n"
+                "Or use initialize_data.py to reset default FAQs."
+            )
+            return ADMIN_MENU
+        
+        elif text == '💰 Limits':
+            # Show current limits
+            await update.message.reply_text(
+                f"💰 Usage Limits\n\n"
+                f"Free Daily Limit: {self.free_limit}\n"
+                f"Premium Daily Limit: {self.premium_limit}\n"
+                f"Flood Threshold: {self.flood_threshold} requests\n"
+                f"Flood Window: {self.flood_window} seconds\n\n"
+                f"To change limits, edit config.ini and restart the bot."
+            )
+            return ADMIN_MENU
+        
+        elif text == '🔙 Back to Admin':
+            keyboard = self.get_admin_keyboard()
+            await update.message.reply_text("👑 Admin Panel", reply_markup=keyboard)
+            return ADMIN_MENU
+        
         elif text == '🔙 Back to Main':
             is_premium = await self.db.is_premium(user_id)
             is_agent = await self.db.is_agent(user_id)
@@ -793,8 +843,51 @@ class ThumbnailBot:
             await update.message.reply_text("Returning to main menu...", reply_markup=keyboard)
             return MAIN_MENU
         
+        elif text == '👥 User Management':
+            await update.message.reply_text(
+                "👥 User Management\n\n"
+                "Use the web admin panel (admin_panel.py) for:\n"
+                "• View all users\n"
+                "• Grant/revoke premium\n"
+                "• Ban/unban users\n"
+                "• View user details"
+            )
+            return ADMIN_MENU
+        
+        elif text == '📢 Broadcast':
+            await update.message.reply_text(
+                "📢 Broadcast Message\n\n"
+                "Feature available via web admin panel.\n"
+                "Start admin panel: python3 admin_panel.py"
+            )
+            return ADMIN_MENU
+        
+        elif text == '🎫 Support Tickets':
+            # Show admin ticket management
+            open_tickets = await self.db.get_open_tickets()
+            total_tickets = len(open_tickets) if open_tickets else 0
+            await update.message.reply_text(
+                f"🎫 Support Tickets\n\n"
+                f"Open Tickets: {total_tickets}\n\n"
+                f"Manage tickets via web admin panel or assign agents."
+            )
+            return ADMIN_MENU
+        
+        elif text == '👨‍💼 Agent Management':
+            await update.message.reply_text(
+                "👨‍💼 Agent Management\n\n"
+                "Use the web admin panel to:\n"
+                "• Add/remove agents\n"
+                "• View agent stats\n"
+                "• Manage ticket assignments"
+            )
+            return ADMIN_MENU
+        
         else:
-            await update.message.reply_text("Feature coming soon!")
+            await update.message.reply_text(
+                "❌ Unknown command. Please use the menu buttons.\n\n"
+                "Use 🔙 Back buttons to navigate."
+            )
             return ADMIN_MENU
     
     async def show_bot_stats(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -836,7 +929,7 @@ class ThumbnailBot:
                 await update.message.reply_text("📋 No open tickets at the moment!")
             else:
                 ticket_list = "📋 Open Tickets:\n\n"
-                for ticket in tickets[:15]:
+                for ticket in tickets[:TICKET_LIST_LIMIT]:
                     ticket_list += (
                         f"🎫 {ticket['ticket_id']}\n"
                         f"Subject: {ticket['subject']}\n"
@@ -847,6 +940,41 @@ class ThumbnailBot:
             
             return AGENT_MENU
         
+        elif text == '✅ My Tickets':
+            # Show agent's assigned tickets
+            tickets = await self.db.get_agent_tickets(user_id)
+            
+            if not tickets:
+                await update.message.reply_text("📋 You have no assigned tickets!")
+            else:
+                ticket_list = "📋 Your Assigned Tickets:\n\n"
+                for ticket in tickets[:TICKET_LIST_LIMIT]:
+                    ticket_list += (
+                        f"🎫 {ticket['ticket_id']}\n"
+                        f"Subject: {ticket['subject']}\n"
+                        f"Status: {ticket['status']}\n"
+                        f"Created: {ticket['created_at'][:16]}\n\n"
+                    )
+                await update.message.reply_text(ticket_list)
+            
+            return AGENT_MENU
+        
+        elif text == '📊 My Stats':
+            # Show agent stats
+            stats = await self.db.get_agent_stats(user_id)
+            if stats:
+                stats_text = (
+                    f"📊 Agent Statistics\n\n"
+                    f"🎫 Assigned Tickets: {stats.get('assigned_tickets', 0)}\n"
+                    f"✅ Resolved Tickets: {stats.get('resolved_tickets', 0)}\n"
+                    f"🟢 Status: {'Online' if stats.get('is_online') else 'Offline'}"
+                )
+            else:
+                stats_text = "📊 No statistics available yet."
+            
+            await update.message.reply_text(stats_text)
+            return AGENT_MENU
+        
         elif text == '🔙 Back to Main':
             is_premium = await self.db.is_premium(user_id)
             is_admin = user_id in self.admin_ids
@@ -855,7 +983,10 @@ class ThumbnailBot:
             return MAIN_MENU
         
         else:
-            await update.message.reply_text("Feature coming soon!")
+            await update.message.reply_text(
+                "❌ Unknown command. Please use the menu buttons.\n\n"
+                "Use 🔙 Back to Main to return."
+            )
             return AGENT_MENU
     
     async def post_init(self, application: Application):
