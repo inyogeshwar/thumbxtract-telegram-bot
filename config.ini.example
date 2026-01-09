@@ -17,3 +17,11 @@ premium_referrals_required = 10
 
 [languages]
 default = en
+
+[payment]
+upi_id = your-upi-id@bank
+premium_days = 30
+
+[admin_panel]
+username = admin
+password = admin123
