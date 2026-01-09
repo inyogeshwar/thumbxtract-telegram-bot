@@ -1,0 +1,19 @@
+[bot]
+token = YOUR_BOT_TOKEN_HERE
+admin_ids = 123456789
+
+[database]
+path = bot_data.db
+
+[limits]
+free_daily_limit = 10
+premium_daily_limit = 1000
+flood_threshold = 5
+flood_window = 60
+
+[referral]
+bonus_uses = 5
+premium_referrals_required = 10
+
+[languages]
+default = en
