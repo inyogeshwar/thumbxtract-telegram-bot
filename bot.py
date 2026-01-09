@@ -288,8 +288,7 @@ class ThumbnailBot:
         
         else:
             # Try to process as YouTube link
-            await self.handle_youtube_link(update, context)
-            return MAIN_MENU
+            return await self.handle_youtube_link(update, context)
     
     async def show_stats(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Show user statistics."""
