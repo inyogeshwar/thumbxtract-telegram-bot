@@ -470,24 +470,38 @@ class Database:
     
     # Support Ticket Methods
     async def create_ticket(self, user_id: int, subject: str) -> str:
-        """Create a new support ticket."""
+        """Create a new support ticket with unique ID."""
         import random
         import string
         
-        # Generate unique ticket ID
-        ticket_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+        # Generate unique ticket ID with retry logic
+        max_attempts = 10
+        for attempt in range(max_attempts):
+            ticket_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+            
+            try:
+                async with aiosqlite.connect(self.db_path) as db:
+                    # Check if ticket ID already exists
+                    async with db.execute(
+                        'SELECT ticket_id FROM support_tickets WHERE ticket_id = ?',
+                        (ticket_id,)
+                    ) as cursor:
+                        existing = await cursor.fetchone()
+                    
+                    if not existing:
+                        # ID is unique, create ticket
+                        await db.execute('''
+                            INSERT INTO support_tickets (ticket_id, user_id, subject)
+                            VALUES (?, ?, ?)
+                        ''', (ticket_id, user_id, subject))
+                        await db.commit()
+                        return ticket_id
+            except Exception as e:
+                logger.error(f"Error creating ticket (attempt {attempt + 1}): {e}")
         
-        try:
-            async with aiosqlite.connect(self.db_path) as db:
-                await db.execute('''
-                    INSERT INTO support_tickets (ticket_id, user_id, subject)
-                    VALUES (?, ?, ?)
-                ''', (ticket_id, user_id, subject))
-                await db.commit()
-                return ticket_id
-        except Exception as e:
-            logger.error(f"Error creating ticket: {e}")
-            return None
+        # If all attempts failed, return None
+        logger.error(f"Failed to create unique ticket ID after {max_attempts} attempts")
+        return None
     
     async def get_ticket(self, ticket_id: str) -> Optional[dict]:
         """Get ticket information."""

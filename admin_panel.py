@@ -569,7 +569,7 @@ TICKETS_TEMPLATE = '''
                             <a href="{{ url_for('update_ticket_status_route', ticket_id=ticket.ticket_id, status='resolved') }}" 
                                class="btn btn-success">Resolve</a>
                             <a href="{{ url_for('download_attachments', ticket_id=ticket.ticket_id) }}" 
-                               class="btn btn-info">Download ZIP</a>
+                               class="btn btn-info" title="Download attachment metadata and file IDs">Info ZIP</a>
                         </td>
                     </tr>
                     {% endfor %}
@@ -923,18 +923,45 @@ def download_attachments(ticket_id):
     if not attachments:
         return "No attachments found for this ticket.", 404
     
-    # Create temp ZIP file
+    # Create temp ZIP file with attachment metadata
+    # Note: This creates a ZIP with file information, not actual files
+    # Actual files are stored in Telegram and can be accessed via bot
+    # For full file download, use Telegram Bot API with the file_id
     temp_dir = tempfile.mkdtemp()
-    zip_path = os.path.join(temp_dir, f'{ticket_id}_attachments.zip')
+    zip_path = os.path.join(temp_dir, f'{ticket_id}_attachments_info.zip')
     
     with zipfile.ZipFile(zip_path, 'w') as zipf:
-        for attachment in attachments:
-            # Note: We only store file_id, not actual files
-            # In a real implementation, you'd download files from Telegram
-            info = f"{attachment['file_type']}_{attachment['file_id']}.txt"
-            zipf.writestr(info, f"File ID: {attachment['file_id']}\nType: {attachment['file_type']}\nName: {attachment.get('file_name', 'N/A')}")
+        for i, attachment in enumerate(attachments, 1):
+            # Create a text file with attachment info
+            info_content = (
+                f"Attachment #{i}\n"
+                f"{'='*50}\n"
+                f"File Type: {attachment['file_type']}\n"
+                f"File Name: {attachment.get('file_name', 'N/A')}\n"
+                f"Telegram File ID: {attachment['file_id']}\n"
+                f"File Unique ID: {attachment['file_unique_id']}\n"
+                f"Created: {attachment['created_at']}\n\n"
+                f"Note: To download the actual file, use the Telegram Bot API:\n"
+                f"https://api.telegram.org/bot<TOKEN>/getFile?file_id={attachment['file_id']}\n"
+            )
+            filename = f"attachment_{i}_{attachment['file_type']}_info.txt"
+            zipf.writestr(filename, info_content)
+        
+        # Add README
+        readme_content = (
+            f"Ticket Attachments Information\n"
+            f"{'='*50}\n\n"
+            f"Ticket ID: {ticket_id}\n"
+            f"Total Attachments: {len(attachments)}\n\n"
+            f"This ZIP contains metadata about ticket attachments.\n"
+            f"Actual files are stored in Telegram and can be accessed via the bot.\n\n"
+            f"To download actual files:\n"
+            f"1. Use the file_id with Telegram Bot API\n"
+            f"2. Or forward files from the bot conversation\n"
+        )
+        zipf.writestr('README.txt', readme_content)
     
-    return send_file(zip_path, as_attachment=True, download_name=f'{ticket_id}_attachments.zip')
+    return send_file(zip_path, as_attachment=True, download_name=f'{ticket_id}_attachments_info.zip')
 
 
 def main():

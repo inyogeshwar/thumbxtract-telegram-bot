@@ -473,15 +473,18 @@ class ThumbnailBot:
         # Get thumbnails
         thumbnails = self.youtube.get_thumbnails(video_id)
         
-        # Filter based on quality selection
+        # Filter based on quality selection using quality field
         selected_thumbnails = []
         
         if text == '🎨 MaxRes':
-            selected_thumbnails = [t for t in thumbnails if 'maxres' in t['url'].lower()]
+            # MaxRes quality thumbnails
+            selected_thumbnails = [t for t in thumbnails if 'Maximum' in t['quality'] or 'maxres' in t['filename'].lower()]
         elif text == '📺 HD':
-            selected_thumbnails = [t for t in thumbnails if 'hq' in t['url'].lower() or 'sd' in t['url'].lower()]
+            # HD quality thumbnails (SD and HQ)
+            selected_thumbnails = [t for t in thumbnails if 'High' in t['quality'] or 'Standard' in t['quality']]
         elif text == '📱 Medium':
-            selected_thumbnails = [t for t in thumbnails if 'mq' in t['url'].lower()]
+            # Medium quality thumbnails
+            selected_thumbnails = [t for t in thumbnails if 'Medium' in t['quality']]
         elif text == '⚡ All Qualities':
             selected_thumbnails = thumbnails
         else:
