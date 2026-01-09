@@ -154,7 +154,6 @@ class Database:
         # Check if premium has expired
         premium_expiry = user.get('premium_expiry')
         if premium_expiry:
-            from datetime import datetime
             expiry_date = datetime.fromisoformat(premium_expiry)
             if datetime.now() > expiry_date:
                 # Premium has expired, update status
@@ -177,7 +176,6 @@ class Database:
     async def set_premium_with_expiry(self, user_id: int, days: int):
         """Set user premium status with expiry."""
         try:
-            from datetime import datetime, timedelta
             expiry_date = datetime.now() + timedelta(days=days)
             
             async with aiosqlite.connect(self.db_path) as db:
