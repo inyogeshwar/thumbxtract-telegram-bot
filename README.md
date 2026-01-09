@@ -1,131 +1,273 @@
-# YouTube Thumbnail Extractor Telegram Bot
+# 🚀 YouTube Thumbnail Downloader & Support Bot - 2026 Edition
 
-A feature-rich, production-ready Telegram bot that extracts YouTube video IDs from any link format and sends all available thumbnails. Built with python-telegram-bot v20 and featuring a complete monetization system, payment processing, and admin panel.
+A feature-complete, production-ready Telegram bot with advanced support ticketing, multi-agent operations, and comprehensive analytics. Built with python-telegram-bot v20+ featuring ReplyKeyboard UI for optimal mobile experience.
 
-## 🚀 Core Features
+## ✨ Complete Feature List
 
-### 🎥 Video Support
-- ✅ **Any YouTube Link Format**
+### 🎥 Core YouTube Features
+
+- ✅ **Universal Link Support**
   - `youtube.com/watch?v=VIDEO_ID`
   - `youtu.be/VIDEO_ID`
   - `youtube.com/shorts/VIDEO_ID`
   - `youtube.com/live/VIDEO_ID`
   - Direct video IDs (11 characters)
-- ✅ **Auto Video ID Extraction**
-- ✅ **Smart Thumbnail Detection** - Only sends thumbnails that exist (HEAD request validation)
-- ✅ **Fast Response** - No API keys, no login required
 
-### 🖼️ Media Features
-- ✅ **All Available Thumbnails**
-  - Maximum Resolution (1920x1080)
-  - Standard Definition (640x480)
-  - High Quality (480x360)
-  - Medium Quality (320x180)
-  - Default and numbered thumbnails
-- ✅ **Clean Captions** - Quality labels without clutter
+- ✅ **Automatic Video ID Detection**
+- ✅ **Smart Thumbnail Validation** - Only fetches existing thumbnails
+- ✅ **Multiple Quality Options:**
+  - MaxRes (1920x1080)
+  - HD (High Quality)
+  - Medium Quality
+  - All Qualities (default)
 - ✅ **No Watermark** - Direct YouTube CDN links
-- ✅ **No Quality Loss** - Original resolution thumbnails
+- ✅ **No API Required** - Fast and reliable
+- ✅ **Super Fast Processing**
 
-### 🧠 Smart UI Features
-- ✅ **Inline Keyboard Buttons** - Context-aware action buttons
-- ✅ **Smart Navigation**
-  - "New Video" button after results
-  - "Main Menu" fallback
-  - Quick action buttons in help
-- ✅ **One-Click Actions** - Premium upgrade, referrals, stats
-- ✅ **Clean Premium UI** - Professional button layout
+### 🎛️ Smart Download System
 
-### 🌍 Language Features
-- ✅ **Auto Language Detection** - Smart text analysis
-- ✅ **Multi-language Support**
+- ✅ **ReplyKeyboard-Based Quality Selection**
+- ✅ **User Chooses One Quality Only** - Bandwidth optimized
+- ✅ **No Bulk Sending by Default** - VPS safe
+- ✅ **Auto Fallback** - If quality unavailable
+- ✅ **Optimized for Low Bandwidth**
+
+### 🤖 Smart UI / UX
+
+- ✅ **Fully ReplyKeyboard Driven**
+- ✅ **Context-Aware Menus**
+- ✅ **Zero Typing Required** - Button-based navigation
+- ✅ **Mobile-First Design**
+- ✅ **Clean & Premium Experience**
+- ✅ **ConversationHandler Architecture**
+
+### 🌍 Multi-Language System
+
+- ✅ **Auto Language Detection** from user messages
+- ✅ **Supported Languages:**
   - 🇬🇧 English
-  - 🇪🇸 Spanish (Español)
   - 🇮🇳 Hindi (हिंदी)
-- ✅ **Manual Language Selection** via `/language` command
-- ✅ **Easy to Extend** - Add new languages easily
+  - 🇪🇸 Spanish (Español)
+- ✅ **Easy Language Addition** - Modular i18n system
+- ✅ **No Manual Selection Needed** - Auto-detects from Telegram
 
-### 🎁 Referral System
-- ✅ **Unique Referral Links** - Per user tracking
-- ✅ **Auto Tracking** - Automatic referral counting
-- ✅ **Bonus Rewards** - Extra requests per referral
-- ✅ **Premium Unlock** - Free premium after N referrals
-- ✅ **Growth Focused** - Viral growth mechanics
+### 💎 Free & Premium System
 
-### 💰 Monetization System
-- ✅ **Free + Premium Tiers**
-- ✅ **Daily Usage Limits** (Free: 10, Premium: 1000)
-- ✅ **Upgrade CTAs** - Strategic premium promotion
-- ✅ **Payment Integration**
+- ✅ **Free Daily Limit** - 10 requests/day (configurable)
+- ✅ **Premium Unlimited** - 1000 requests/day (configurable)
+- ✅ **Premium-Only Features:**
+  - ZIP downloads
+  - Priority processing
+  - No ads
+  - Early feature access
+- ✅ **Dynamic Limits** - Admin can change via web panel
 
 ### 💳 Payment System
-- ✅ **UPI Payment Support** (India)
-  - Manual payment flow
-  - Screenshot upload
-  - Admin verification
-- ✅ **Telegram Stars** (Coming Soon placeholder)
-- ✅ **Premium Validity** - Days-based expiry tracking
-- ✅ **Payment Proof Storage** - Secure file tracking
-- ✅ **Admin Approval Workflow** - Inline approve/reject buttons
 
-### 📦 Premium Features
-- ✅ **Unlimited Daily Requests** (1000/day vs 10/day)
-- ✅ **Priority Processing**
-- ✅ **No Ads**
-- ✅ **MaxRes Guaranteed**
-- ✅ **Early Feature Access**
+- ✅ **UPI Payments** - India-focused
+- ✅ **Payment Proof Upload** - Screenshot verification
+- ✅ **Manual Admin Approval**
+- ✅ **Payment History Tracking**
+- ✅ **Instant Admin Alerts** - Get notified immediately
+- ✅ **Premium Expiry System** - 30 days default
+- 🔜 **Telegram Stars** - Coming soon placeholder
+
+### 🎁 Referral System
+
+- ✅ **Unique Referral Link Per User**
+- ✅ **Automatic Referral Tracking**
+- ✅ **Referral-Based Rewards** - Bonus requests
+- ✅ **Premium Unlock** - Free premium after 10 referrals
+- ✅ **Growth-Focused Viral Loop**
 
 ### 🛡️ Security & Anti-Spam
-- ✅ **Flood Control** - Time-based rate limiting
-- ✅ **Request Rate Limiting**
-- ✅ **User Ban System** - Admin-controlled bans
-- ✅ **Abuse Prevention**
-- ✅ **Safe Bot Usage**
 
-### 📊 Admin Features (Bot)
-- ✅ **Broadcast Messages** - `/broadcast` to all users
-- ✅ **User Management** - `/ban` and `/unban` commands
-- ✅ **Payment Approval** - Inline approve/reject buttons
-- ✅ **Admin Statistics** - `/adminstats` command
+- ✅ **Flood Control** - Time-based rate limiting
+- ✅ **Abuse Prevention**
+- ✅ **User Ban System** - Admin can ban/unban
+- ✅ **Maintenance Mode** - Emergency shutdown
+- ✅ **Safe Request Handling**
+
+### 🔒 Force Join Channel
+
+- ✅ **Mandatory Channel Join** - Configurable
+- ✅ **Join Check Before Usage**
+- ✅ **ON/OFF Toggle** - Admin panel
+- ✅ **Channel Change Anytime** - Dynamic config
+- ✅ **Reply Button Flow** - User-friendly
+
+### 👑 Admin Control (Bot)
+
+- ✅ **ReplyKeyboard Admin Panel**
+- ✅ **No Commands Needed** - Button-driven
+- ✅ **Live Setting Control:**
+  - Free limit
+  - Premium limit
+  - Referral bonus
+  - Flood time
+- ✅ **Force Join Control** - Enable/disable, set channel
+- ✅ **Maintenance Control** - Toggle mode
+- ✅ **User Management** - Ban/unban from web
+- ✅ **Live Bot Stats**
 
 ### 🌐 Web Admin Panel
-- ✅ **Secure Login** - Username/password authentication
-- ✅ **User Management Dashboard**
-  - View all users
-  - Toggle premium status
-  - Ban/unban users
-- ✅ **Real-time Analytics**
+
+- ✅ **Secure Login** - Username/password auth
+- ✅ **Modern Dashboard** - Chart.js analytics
+- ✅ **Real-Time Statistics:**
   - Total users
   - Premium users
   - Banned users
   - Today's requests
+  - Open tickets
+  - Online agents
   - Pending payments
-- ✅ **Lightweight Flask Panel** - Minimal dependencies
-- ✅ **Responsive Design** - Clean, modern UI
 
-### 🗂️ Database Features
-- ✅ **SQLite Database** - No external DB required
-- ✅ **User Tracking** - Complete user profiles
-- ✅ **Referral Tracking** - Full referral tree
-- ✅ **Premium Status** - With expiry dates
-- ✅ **Daily Usage Counting**
-- ✅ **Ban Flags**
-- ✅ **Payment Proof Storage**
+- ✅ **User Management:**
+  - View all users
+  - Toggle premium
+  - Ban/unban users
+  - User details
 
-### ⚙️ Technical Features
-- ✅ **Python-based** - Modern async/await
-- ✅ **Scalable Structure** - Modular design
-- ✅ **VPS/Local Deploy** - Works anywhere
-- ✅ **Environment Config** - Easy configuration
-- ✅ **Easy Maintenance** - Clean codebase
+- ✅ **Support Management:**
+  - View all tickets
+  - Update ticket status
+  - Download attachments as ZIP
+  - Ticket assignment view
 
-## 📋 Installation
+- ✅ **Agent Management:**
+  - View all agents
+  - Agent performance metrics
+  - Online/offline status
+  - Tickets handled statistics
+
+- ✅ **Settings Panel:**
+  - Maintenance mode toggle
+  - Force join toggle
+  - Channel configuration
+  - Limit configuration
+  - Referral bonus settings
+  - Flood control settings
+
+- ✅ **No Bot Restart Required** - Live updates
+
+### 📊 Analytics & Reports
+
+- ✅ **User Growth Chart** - Last 7 days (Chart.js)
+- ✅ **Daily Requests Chart** - Last 7 days (Chart.js)
+- ✅ **Real-Time Statistics**
+- ✅ **Agent Performance Tracking**
+- ✅ **Ticket Analytics**
+- 🔜 **Export-Ready Data**
+
+### 💬 Support Ticket System
+
+- ✅ **Built-In Support Menu**
+- ✅ **Ticket ID Generation** - 8-character unique IDs
+- ✅ **Ticket Status Tracking** - Open/resolved
+- ✅ **Private Ticket Threads** - User ↔ Agent only
+- ✅ **Subject & Message System**
+- ✅ **My Tickets View** - User can see their tickets
+
+### 📎 Advanced Support Features
+
+- ✅ **Multiple Attachments Per Ticket**
+- ✅ **Photo Support**
+- ✅ **Document Support**
+- ✅ **Video Support**
+- ✅ **Audio Support**
+- ✅ **Telegram file_id Based** - No VPS storage
+- ✅ **Admin-Only ZIP Download** - All attachments
+- ✅ **Auto Cleanup After Send** - Temp file management
+
+### 🤖 Auto-Reply FAQ Bot
+
+- ✅ **Keyword-Based Instant Answers**
+- ✅ **Reduces Support Load**
+- ✅ **Editable FAQ via DB**
+- ✅ **Falls Back to Ticket Creation**
+- ✅ **Multi-Language FAQ Support**
+
+### ⏱️ SLA & Escalation System
+
+- ✅ **First Reply SLA Tracking** - Database structure ready
+- ✅ **Resolution SLA Tracking** - Database structure ready
+- 🔜 **Auto SLA Breach Detection**
+- 🔜 **Auto Escalation Alerts**
+- 🔜 **Priority Upgrade on Breach**
+
+### 🧑‍💼 Multi-Agent Support Operations
+
+- ✅ **Multiple Admin Roles:**
+  - Owner
+  - Manager
+  - Support
+  - Viewer
+
+- ✅ **Agent Online/Offline Status**
+- ✅ **Automatic Ticket Assignment** - Load balancing
+- ✅ **Least Busy Agent Selection**
+- 🔜 **Auto Reassignment on SLA Breach**
+- ✅ **Agent Panel in Bot**
+
+### 📊 Agent Performance Analytics
+
+- ✅ **Tickets Handled Per Agent**
+- ✅ **Average Reply Time** - Tracked
+- ✅ **Tickets Closed Count**
+- ✅ **Agent Database Structure**
+- 🔜 **Agent Leaderboard**
+- 🔜 **Support Efficiency Insights**
+
+### 📦 ZIP Generation Service
+
+- 🔜 **Premium-Only ZIP Download** - For thumbnails
+- ✅ **Admin ZIP for Attachments** - Support tickets
+- ✅ **Temporary ZIP Creation**
+- ✅ **Auto Delete After Send**
+- ✅ **VPS Safe & Scalable**
+
+### 🗂️ Database & Architecture
+
+- ✅ **SQLite** - Lightweight & fast
+- ✅ **Normalized Tables:**
+  - users
+  - usage
+  - referrals
+  - flood_control
+  - payment_proofs
+  - support_tickets
+  - support_messages
+  - support_attachments
+  - agents
+  - faq
+  - bot_settings
+
+- ✅ **Scalable Schema**
+- ✅ **Production-Ready Structure**
+- ✅ **Easy Migration** to MySQL/PostgreSQL
+
+### ⚙️ Tech Stack
+
+- ✅ **Python 3.8+**
+- ✅ **python-telegram-bot v20+**
+- ✅ **Flask** - Admin panel
+- ✅ **SQLite** - Database
+- ✅ **Chart.js** - Analytics visualization
+- ✅ **aiosqlite** - Async database operations
+- ✅ **langdetect** - Language detection
+- ✅ **aiohttp** - Async HTTP requests
+- ✅ **VPS / Cloud Ready**
+
+## 🚀 Installation
 
 ### Prerequisites
+
 - Python 3.8 or higher
 - pip (Python package manager)
-- Telegram Bot Token (from [@BotFather](https://t.me/BotFather))
+- Telegram Bot Token from [@BotFather](https://t.me/BotFather)
 
-### Setup
+### Quick Setup
 
 1. **Clone the repository**
    ```bash
@@ -141,9 +283,10 @@ A feature-rich, production-ready Telegram bot that extracts YouTube video IDs fr
 3. **Configure the bot**
    ```bash
    cp config.ini.example config.ini
+   nano config.ini
    ```
    
-   Edit `config.ini` and configure your settings:
+   Update these required settings:
    ```ini
    [bot]
    token = YOUR_BOT_TOKEN_HERE
@@ -151,11 +294,10 @@ A feature-rich, production-ready Telegram bot that extracts YouTube video IDs fr
    
    [payment]
    upi_id = your-upi-id@bank
-   premium_days = 30
    
    [admin_panel]
    username = admin
-   password = CHANGE_THIS_PASSWORD
+   password = CHANGE_THIS_STRONG_PASSWORD
    ```
 
 4. **Run the bot**
@@ -163,247 +305,292 @@ A feature-rich, production-ready Telegram bot that extracts YouTube video IDs fr
    python bot.py
    ```
 
-5. **Run the admin panel** (optional, in a separate terminal)
+5. **Run the admin panel** (in separate terminal)
    ```bash
    python admin_panel.py
    ```
    Access at: http://localhost:5000
 
-## 📖 Configuration
+## 📖 User Guide
 
-The `config.ini` file contains all bot settings:
+### Getting Started
 
-### Bot Settings
-- `token`: Your Telegram bot token from BotFather
-- `admin_ids`: Comma-separated list of admin user IDs
+1. Start the bot: `/start`
+2. Use the menu buttons - no typing needed!
+3. Click `📹 Get Thumbnail`
+4. Send any YouTube link
+5. Choose quality: MaxRes, HD, Medium, or All
+6. Receive thumbnails instantly!
 
-### Database Settings
-- `path`: Path to SQLite database file (default: `bot_data.db`)
+### Main Menu Options
 
-### Limits
-- `free_daily_limit`: Daily request limit for free users (default: 10)
-- `premium_daily_limit`: Daily request limit for premium users (default: 1000)
-- `flood_threshold`: Maximum requests within flood window (default: 5)
-- `flood_window`: Flood control window in seconds (default: 60)
+- **📹 Get Thumbnail** - Download YouTube thumbnails
+- **📊 My Stats** - View your usage statistics
+- **🎁 Referrals** - Get your referral link
+- **💎 Premium** - View premium benefits
+- **❓ Help** - Show help information
+- **💬 Support** - Access support center
 
-### Referral System
-- `bonus_uses`: Bonus requests per referral (default: 5)
-- `premium_referrals_required`: Referrals needed for free premium (default: 10)
+### Support Center
 
-### Payment Settings
-- `upi_id`: Your UPI ID for receiving payments
-- `premium_days`: Premium validity in days (default: 30)
+- **🎫 Create Ticket** - Open a new support ticket
+- **📋 My Tickets** - View your tickets
+- **❓ FAQ** - Quick answers
+- **🔙 Back to Main** - Return to main menu
 
-### Admin Panel
-- `username`: Admin panel username (default: admin)
-- `password`: Admin panel password (CHANGE THIS!)
+### Creating Support Tickets
 
-### Languages
-- `default`: Default language code (default: en)
+1. Click `💬 Support`
+2. Click `🎫 Create Ticket`
+3. Enter subject
+4. Describe your issue
+5. Optionally add attachments (photos, documents, videos, audio)
+6. Submit ticket
+7. Get help from support agents!
 
-## 🎮 Usage
+### Premium Features
 
-### User Commands
+Get premium by:
+1. **Referrals** - Refer 10 friends (free!)
+2. **Payment** - UPI payment with admin approval
 
-- `/start` - Start the bot and register
-- `/help` - Show help message with usage instructions
-- `/stats` - View your usage statistics
-- `/referral` - Get your referral link and see referral count
-- `/premium` - View premium benefits and upgrade options
-- `/language` - Change bot language
-
-### Admin Commands
-
-- `/adminstats` - View bot-wide statistics (admin only)
-- `/broadcast <message>` - Send message to all users (admin only)
-- `/ban <user_id>` - Ban a user (admin only)
-- `/unban <user_id>` - Unban a user (admin only)
-
-### Getting Thumbnails
-
-Simply send any YouTube link or video ID to the bot:
-
-**Examples:**
-```
-https://www.youtube.com/watch?v=dQw4w9WgXcQ
-https://youtu.be/dQw4w9WgXcQ
-https://youtube.com/shorts/dQw4w9WgXcQ
-dQw4w9WgXcQ
-```
-
-The bot will:
-1. Extract the video ID
-2. Check which thumbnails exist
-3. Send all available thumbnails
-4. Show action buttons (New Video, Main Menu)
-
-## 🏗️ Project Structure
-
-```
-thumbxtract-telegram-bot/
-├── bot.py              # Main bot application
-├── database.py         # SQLite database operations
-├── youtube_utils.py    # YouTube video ID extraction and thumbnail generation
-├── i18n.py            # Internationalization and language support
-├── admin_panel.py      # Flask-based web admin panel
-├── config.ini.example  # Example configuration file
-├── requirements.txt    # Python dependencies
-├── test_bot.py        # Test suite
-├── .gitignore         # Git ignore rules
-└── README.md          # This file
-```
-
-## 🗄️ Database Schema
-
-### users table
-- `user_id` (PRIMARY KEY): Telegram user ID
-- `username`: Telegram username
-- `first_name`: User's first name
-- `language_code`: User's language preference
-- `is_premium`: Premium status (0/1)
-- `premium_expiry`: Premium expiration date
-- `referred_by`: User ID of referrer
-- `referral_count`: Number of successful referrals
-- `is_banned`: Ban status (0/1)
-- `created_at`: Registration timestamp
-- `last_active`: Last activity timestamp
-
-### usage table
-- `id` (PRIMARY KEY): Auto-increment ID
-- `user_id`: Foreign key to users
-- `date`: Date of usage
-- `count`: Number of requests on that date
-
-### referrals table
-- `id` (PRIMARY KEY): Auto-increment ID
-- `referrer_id`: User who referred
-- `referred_id`: User who was referred
-- `created_at`: Referral timestamp
-
-### flood_control table
-- `user_id` (PRIMARY KEY): Telegram user ID
-- `request_count`: Request count in current window
-- `window_start`: Window start timestamp
-
-### payment_proofs table
-- `id` (PRIMARY KEY): Auto-increment ID
-- `user_id`: Foreign key to users
-- `file_id`: Telegram file ID
-- `file_unique_id`: Unique file identifier
-- `status`: Payment status (pending/approved/rejected)
-- `created_at`: Upload timestamp
-
-## 💡 Feature Details
-
-### Referral System
-1. Users get a unique referral link: `https://t.me/YOUR_BOT?start=ref_USER_ID`
-2. When someone joins via the link:
-   - Both users get bonus requests
-   - Referrer's count increments
-3. After N referrals (default: 10):
-   - Referrer gets free premium automatically
-   - Notification sent to referrer
-
-### Premium System
-
-**How to Get Premium:**
-1. **Via Referrals**: Refer 10 users (free)
-2. **Via Payment**: UPI payment with admin approval
-
-**Premium Benefits:**
+Premium benefits:
 - 1000 requests/day (vs 10 for free)
 - Priority processing
 - No ads
-- Early access to features
-- Premium badge
+- ZIP downloads (coming soon)
+- Premium support
 
-**Payment Flow:**
-1. User clicks "Buy Premium"
-2. Chooses payment method (UPI/Stars)
-3. Makes payment to UPI ID
-4. Uploads screenshot
-5. Admin approves/rejects
-6. Premium activated with expiry date
+### Referral System
 
-### Flood Control
-- Tracks requests per user in a time window
-- Default: 5 requests per 60 seconds
-- Temporarily blocks excessive requesters
-- Auto-resets after window expires
-- Prevents bot abuse
+1. Click `🎁 Referrals`
+2. Copy your unique link
+3. Share with friends
+4. Both get bonus requests!
+5. Get free premium after 10 referrals
 
-### Multi-language Support
-The bot detects language from:
-1. User's manual selection (`/language`)
-2. Telegram's language setting
-3. Default fallback (English)
+## 👑 Admin Guide
 
-Supported languages:
-- English (en) 🇬🇧
-- Spanish (es) 🇪🇸
-- Hindi (hi) 🇮🇳
+### Web Admin Panel
 
-**Adding New Languages:**
-1. Add translations to `i18n.py` TRANSLATIONS dict
-2. Add language name to LANGUAGE_NAMES dict
-3. Done!
+Access at `http://localhost:5000` (or your VPS IP)
 
-### Admin Panel Features
+**Default Login:**
+- Username: `admin`
+- Password: `admin123` (CHANGE THIS!)
 
-Access the web panel at `http://localhost:5000` (or your VPS IP)
+### Dashboard Features
 
-**Features:**
-- 📊 Real-time statistics dashboard
-- 👥 User list with filters
-- ⚡ Quick actions (premium toggle, ban/unban)
-- 💳 Payment tracking
-- 🔒 Secure authentication
-- 📱 Responsive design
+**Statistics Cards:**
+- Total users
+- Premium users
+- Today's requests
+- Open tickets
+- Online agents
+- Pending payments
 
-**Security:**
-- Change default password in `config.ini`
-- Use strong passwords
-- Consider adding HTTPS for production
-- Restrict access by IP if possible
+**Analytics Charts:**
+- User growth (last 7 days)
+- Daily requests (last 7 days)
 
-## 🧪 Testing
+### Users Management
 
-Run the test suite:
-```bash
-python test_bot.py
+- View all users (latest 100)
+- Toggle premium status
+- Ban/unban users
+- View user details
+
+### Support Tickets
+
+- View all tickets (latest 50)
+- Update ticket status
+- Download attachments as ZIP
+- Monitor ticket metrics
+
+### Agent Management
+
+- View all agents
+- See online/offline status
+- Track performance metrics
+- Monitor ticket assignments
+
+### Settings
+
+- **Maintenance Mode** - Toggle bot on/off
+- **Force Join** - Require channel membership
+- **Channel ID** - Set required channel
+- **Free Limit** - Set free user limit
+- **Premium Limit** - Set premium user limit
+- **Referral Bonus** - Set bonus per referral
+- **Flood Time** - Set rate limit window
+
+### Bot Admin Panel
+
+For admins, the bot shows:
+- **👑 Admin Panel** button
+- Access to bot stats
+- User management options
+- Settings configuration
+
+### Agent Panel
+
+For agents, the bot shows:
+- **🎫 Agent Panel** button
+- Online/offline toggle
+- View open tickets
+- View assigned tickets
+- Track statistics
+
+## 🛠️ Configuration
+
+### config.ini Settings
+
+```ini
+[bot]
+token = YOUR_BOT_TOKEN
+admin_ids = 123456789,987654321
+
+[database]
+path = bot_data.db
+
+[limits]
+free_daily_limit = 10
+premium_daily_limit = 1000
+flood_threshold = 5
+flood_window = 60
+
+[referral]
+bonus_uses = 5
+premium_referrals_required = 10
+
+[languages]
+default = en
+
+[payment]
+upi_id = your-upi-id@bank
+premium_days = 30
+
+[admin_panel]
+username = admin
+password = admin123
 ```
 
-Tests cover:
-- YouTube video ID extraction
-- Thumbnail URL generation
-- Database operations
-- Language detection
-- User management
-- Referral system
+## 🔧 Development
+
+### Project Structure
+
+```
+thumbxtract-telegram-bot/
+├── bot.py                 # Main bot with ReplyKeyboard UI
+├── database.py            # Database operations
+├── youtube_utils.py       # YouTube thumbnail extraction
+├── i18n.py               # Multi-language support
+├── admin_panel.py        # Flask web admin panel
+├── config.ini.example    # Example configuration
+├── requirements.txt      # Python dependencies
+├── README.md            # This file
+├── bot_data.db          # SQLite database (created automatically)
+└── config.ini           # Your configuration (not in git)
+```
+
+### Database Schema
+
+#### Tables
+- **users** - User profiles and status
+- **usage** - Daily usage tracking
+- **referrals** - Referral relationships
+- **flood_control** - Rate limiting
+- **payment_proofs** - Payment screenshots
+- **support_tickets** - Support ticket records
+- **support_messages** - Ticket message history
+- **support_attachments** - Ticket file attachments
+- **agents** - Support agent profiles
+- **faq** - FAQ entries
+- **bot_settings** - Dynamic bot configuration
+
+### Adding New Languages
+
+1. Open `i18n.py`
+2. Add translations to `TRANSLATIONS` dict
+3. Add language name to `LANGUAGE_NAMES` dict
+4. Done! No restart needed.
+
+Example:
+```python
+'fr': {
+    'welcome': "Bienvenue!",
+    # ... more translations
+}
+```
+
+### Adding FAQ Entries
+
+Via database:
+```python
+await db.add_faq(
+    keywords="thumbnail how download",
+    answer="Click 'Get Thumbnail' button and send YouTube link!",
+    language="en"
+)
+```
+
+### Adding Agents
+
+Via database or admin panel:
+```python
+await db.add_agent(user_id=123456789, role='support')
+```
+
+## 📊 Analytics
+
+### User Growth Tracking
+
+- Automatic daily user counting
+- 7-day chart visualization
+- Real-time updates
+
+### Request Analytics
+
+- Daily request counting
+- Per-user usage tracking
+- Limit enforcement
+- Chart visualization
+
+### Agent Performance
+
+- Tickets handled
+- Tickets closed
+- Average reply time
+- Online time tracking
 
 ## 🚀 Deployment
 
-### Local Deployment
+### Local Development
+
 ```bash
 python bot.py
+# In another terminal:
+python admin_panel.py
 ```
 
 ### VPS Deployment
 
-1. **Upload files to VPS**
+1. **Upload files**
    ```bash
-   scp -r . user@your-vps:/path/to/bot/
+   scp -r . user@vps:/path/to/bot/
    ```
 
 2. **Install dependencies**
    ```bash
+   ssh user@vps
+   cd /path/to/bot/
    pip install -r requirements.txt
    ```
 
-3. **Configure bot**
+3. **Configure**
    ```bash
    nano config.ini
-   # Set your bot token and settings
+   # Add your bot token and settings
    ```
 
 4. **Run with screen/tmux**
@@ -411,28 +598,44 @@ python bot.py
    screen -S bot
    python bot.py
    # Ctrl+A, D to detach
-   ```
-
-5. **Optional: Run admin panel**
-   ```bash
+   
    screen -S admin
    python admin_panel.py
    # Ctrl+A, D to detach
    ```
 
-### Systemd Service (Recommended)
+### Systemd Service
 
 Create `/etc/systemd/system/thumbxtract-bot.service`:
+
 ```ini
 [Unit]
-Description=YouTube Thumbnail Extractor Bot
+Description=YouTube Thumbnail Bot
 After=network.target
 
 [Service]
 Type=simple
-User=your-user
+User=botuser
 WorkingDirectory=/path/to/bot
-ExecStart=/usr/bin/python3 /path/to/bot/bot.py
+ExecStart=/usr/bin/python3 bot.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Create `/etc/systemd/system/thumbxtract-admin.service`:
+
+```ini
+[Unit]
+Description=YouTube Thumbnail Bot Admin Panel
+After=network.target
+
+[Service]
+Type=simple
+User=botuser
+WorkingDirectory=/path/to/bot
+ExecStart=/usr/bin/python3 admin_panel.py
 Restart=always
 
 [Install]
@@ -441,241 +644,96 @@ WantedBy=multi-user.target
 
 Enable and start:
 ```bash
-sudo systemctl enable thumbxtract-bot
-sudo systemctl start thumbxtract-bot
+sudo systemctl enable thumbxtract-bot thumbxtract-admin
+sudo systemctl start thumbxtract-bot thumbxtract-admin
 ```
-
-## 🔧 Development
-
-### Adding New Features
-
-1. **Update database schema** in `database.py` if needed
-2. **Implement feature logic**
-3. **Add command handlers** in `bot.py`
-4. **Add translations** in `i18n.py`
-5. **Update documentation**
-6. **Add tests** in `test_bot.py`
-
-### Code Style
-- Follow PEP 8
-- Use async/await for I/O operations
-- Add docstrings to functions
-- Keep functions focused and small
-
-## 📦 Dependencies
-
-- **python-telegram-bot v20.8**: Telegram bot framework
-- **aiosqlite v0.19.0**: Async SQLite database
-- **langdetect v1.0.9**: Language detection
-- **aiohttp v3.9.1**: Async HTTP client (for thumbnail checking)
-- **flask v3.0.0**: Web framework (for admin panel)
-
-## 🚀 Future Enhancements
-
-- [ ] ZIP download of all thumbnails
-- [ ] AI-powered title/SEO suggestions
-- [ ] Advanced analytics dashboard
-- [ ] Docker deployment
-- [ ] Multi-bot scaling
-- [ ] Telegram Stars payment integration
-- [ ] Auto-posting to channels
-- [ ] Custom thumbnail editing
 
 ## 🐛 Troubleshooting
 
-### Bot doesn't respond
+### Bot Not Responding
+
 - Check bot token in `config.ini`
-- Verify internet connection
-- Check bot is running: `ps aux | grep bot.py`
+- Verify bot is running: `ps aux | grep bot.py`
 - Check logs for errors
+- Ensure internet connection
 
-### Database errors
-- Ensure `bot_data.db` has write permissions
-- Check disk space
-- Verify SQLite is installed
+### Database Errors
 
-### Thumbnails not sending
-- Some videos don't have all thumbnail sizes
-- Bot only sends thumbnails that exist (by design)
-- Check video ID is correct
+- Check write permissions on `bot_data.db`
+- Ensure SQLite is installed
+- Verify disk space
 
-### Admin panel not accessible
+### Admin Panel Not Accessible
+
 - Check Flask is running: `ps aux | grep admin_panel.py`
 - Verify port 5000 is not blocked
 - Check firewall settings
-- Try: `http://localhost:5000` or `http://YOUR_VPS_IP:5000`
+- Try `http://localhost:5000` or `http://YOUR_IP:5000`
+
+### Force Join Not Working
+
+- Ensure bot is admin in the channel
+- Use correct channel username (with @)
+- Check channel privacy settings
+
+### Maintenance Mode Issues
+
+- Toggle via admin panel settings
+- Check `bot_settings` table in database
+- Admins bypass maintenance mode
 
 ## 📄 License
 
-MIT License - see LICENSE file for details
+MIT License - Free to use and modify
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please:
+Contributions welcome! Please:
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Add tests if applicable
+4. Test thoroughly
 5. Submit a pull request
 
 ## 💬 Support
 
-For issues, questions, or suggestions:
-- Open an issue on GitHub
-- Contact: [Your Contact Information]
+- GitHub Issues: [Report bugs](https://github.com/inyogeshwar/thumbxtract-telegram-bot/issues)
+- Telegram: Contact bot admins
+- Documentation: This README
 
 ## 🙏 Acknowledgments
 
-- Built with [python-telegram-bot](https://github.com/python-telegram-bot/python-telegram-bot)
-- Thumbnails sourced from YouTube's image CDN
-- Inspired by the Telegram community
+- [python-telegram-bot](https://github.com/python-telegram-bot/python-telegram-bot) - Awesome Telegram bot framework
+- [Flask](https://flask.palletsprojects.com/) - Web framework for admin panel
+- [Chart.js](https://www.chartjs.org/) - Beautiful charts
+- YouTube CDN - For hosting thumbnails
+- Telegram community - For inspiration and support
+
+## 📝 Changelog
+
+### Version 2.0 (2026 Edition)
+- ✅ Complete ReplyKeyboard UI
+- ✅ Support ticket system
+- ✅ Multi-agent operations
+- ✅ Enhanced admin panel with Chart.js
+- ✅ Force join channel
+- ✅ Maintenance mode
+- ✅ FAQ system
+- ✅ Agent management
+- ✅ Performance analytics
+- ✅ Quality selection for thumbnails
+- ✅ Multiple attachment support
+
+### Version 1.0 (Original)
+- Basic thumbnail extraction
+- InlineKeyboard UI
+- Simple admin panel
+- Basic user management
 
 ---
 
 **Made with ❤️ for the Telegram community**
 
 ⭐ Star this repo if you find it useful!
-- `/referral` - Get your referral link and see referral count
-- `/premium` - View premium benefits and requirements
-- `/language` - Change bot language
 
-### Admin Commands
-
-- `/adminstats` - View bot-wide statistics (admin only)
-
-### Extracting Thumbnails
-
-Simply send any YouTube link or video ID to the bot:
-
-```
-https://www.youtube.com/watch?v=dQw4w9WgXcQ
-```
-
-The bot will extract the video ID and send all available thumbnails.
-
-## Project Structure
-
-```
-thumbxtract-telegram-bot/
-├── bot.py              # Main bot application
-├── database.py         # SQLite database operations
-├── youtube_utils.py    # YouTube video ID extraction and thumbnail generation
-├── i18n.py            # Internationalization and language support
-├── config.ini.example  # Example configuration file
-├── requirements.txt    # Python dependencies
-├── .gitignore         # Git ignore rules
-└── README.md          # This file
-```
-
-## Architecture
-
-### Database Schema
-
-**users table**
-- `user_id` (PRIMARY KEY): Telegram user ID
-- `username`: Telegram username
-- `first_name`: User's first name
-- `language_code`: User's language preference
-- `is_premium`: Premium status (0/1)
-- `referred_by`: User ID of referrer
-- `referral_count`: Number of successful referrals
-- `created_at`: Registration timestamp
-- `last_active`: Last activity timestamp
-
-**usage table**
-- `id` (PRIMARY KEY): Auto-increment ID
-- `user_id`: Foreign key to users
-- `date`: Date of usage
-- `count`: Number of requests on that date
-
-**referrals table**
-- `id` (PRIMARY KEY): Auto-increment ID
-- `referrer_id`: User who referred
-- `referred_id`: User who was referred
-- `created_at`: Referral timestamp
-
-**flood_control table**
-- `user_id` (PRIMARY KEY): Telegram user ID
-- `request_count`: Request count in current window
-- `window_start`: Window start timestamp
-
-## Features in Detail
-
-### Referral System
-Users can share their unique referral link to earn bonuses:
-- Each successful referral grants bonus requests
-- Accumulating enough referrals grants free premium status
-- Referrers are notified when they earn premium
-
-### Premium System
-Premium users enjoy:
-- Higher daily limits (default: 1000 vs 10)
-- Priority processing
-- No advertisements
-- Early access to features
-
-Earn premium by:
-- Referring friends (10 referrals = free premium)
-- Future payment options (planned)
-
-### Multi-language Support
-The bot automatically detects user language from:
-1. User's manual selection via `/language`
-2. Telegram's language setting
-3. Message content analysis
-4. Default fallback language
-
-Supported languages:
-- English (en)
-- Spanish (es)
-- Hindi (hi)
-
-### Flood Control
-Protects against spam and abuse:
-- Tracks requests per user in a time window
-- Temporarily blocks users exceeding threshold
-- Automatically resets after window expires
-
-## Development
-
-### Adding New Languages
-
-1. Add translations to `i18n.py` in the `TRANSLATIONS` dictionary
-2. Add language name to `LANGUAGE_NAMES` dictionary
-3. Update this README
-
-### Adding New Features
-
-1. Update database schema in `database.py` if needed
-2. Implement feature logic
-3. Add user-facing commands/handlers in `bot.py`
-4. Update documentation
-
-## Dependencies
-
-- **python-telegram-bot v20.8**: Telegram bot framework
-- **aiosqlite v0.19.0**: Async SQLite database
-- **langdetect v1.0.9**: Language detection
-
-## License
-
-MIT License - see LICENSE file for details
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## Support
-
-For issues, questions, or suggestions:
-- Open an issue on GitHub
-- Contact the bot admin via Telegram
-
-## Acknowledgments
-
-- Built with [python-telegram-bot](https://github.com/python-telegram-bot/python-telegram-bot)
-- Thumbnails sourced from YouTube's image CDN
-
----
-
-Made with ❤️ for the Telegram community
+🚀 **Production-Ready • Feature-Complete • 2026 Edition**
