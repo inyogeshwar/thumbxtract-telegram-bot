@@ -751,6 +751,71 @@ class Database:
             logger.error(f"Error getting all agents: {e}")
             return []
     
+    async def get_agent_tickets(self, user_id: int) -> List[dict]:
+        """Get tickets assigned to a specific agent."""
+        try:
+            async with aiosqlite.connect(self.db_path) as db:
+                db.row_factory = aiosqlite.Row
+                # First get the agent's id from user_id
+                async with db.execute(
+                    'SELECT id FROM agents WHERE user_id = ?', (user_id,)
+                ) as cursor:
+                    agent = await cursor.fetchone()
+                    if not agent:
+                        return []
+                    
+                    agent_id = agent['id']
+                
+                # Get tickets assigned to this agent
+                async with db.execute('''
+                    SELECT * FROM support_tickets 
+                    WHERE assigned_agent_id = ?
+                    ORDER BY created_at DESC
+                ''', (agent_id,)) as cursor:
+                    rows = await cursor.fetchall()
+                    return [dict(row) for row in rows]
+        except Exception as e:
+            logger.error(f"Error getting agent tickets for user {user_id}: {e}")
+            return []
+    
+    async def get_agent_stats(self, user_id: int) -> Optional[dict]:
+        """Get statistics for a specific agent."""
+        try:
+            async with aiosqlite.connect(self.db_path) as db:
+                db.row_factory = aiosqlite.Row
+                # Get agent info
+                async with db.execute(
+                    'SELECT * FROM agents WHERE user_id = ?', (user_id,)
+                ) as cursor:
+                    agent = await cursor.fetchone()
+                    if not agent:
+                        return None
+                    
+                    agent_id = agent['id']
+                
+                # Count assigned tickets
+                async with db.execute(
+                    'SELECT COUNT(*) as count FROM support_tickets WHERE assigned_agent_id = ?',
+                    (agent_id,)
+                ) as cursor:
+                    assigned = await cursor.fetchone()
+                
+                # Count resolved tickets
+                async with db.execute(
+                    'SELECT COUNT(*) as count FROM support_tickets WHERE assigned_agent_id = ? AND status = "closed"',
+                    (agent_id,)
+                ) as cursor:
+                    resolved = await cursor.fetchone()
+                
+                return {
+                    'assigned_tickets': assigned['count'] if assigned else 0,
+                    'resolved_tickets': resolved['count'] if resolved else 0,
+                    'is_online': bool(agent['is_online'])
+                }
+        except Exception as e:
+            logger.error(f"Error getting agent stats for user {user_id}: {e}")
+            return None
+    
     # FAQ Methods
     async def search_faq(self, keywords: str, language: str = 'en') -> Optional[dict]:
         """Search FAQ by keywords."""
